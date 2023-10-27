@@ -1,14 +1,6 @@
 from __future__ import annotations
 
-
-# Données:
-class Product:
-    def __init__(self, coordinates: tuple[int, int], p_type: int, weight: int):
-        self.weight = weight
-        self.coordinates = coordinates
-        self.type = p_type
-
-
+# stocker les objects Warehouse dans une dictionnaire liant un tuple de coordonnées aux objects
 class Warehouse:
     def __init__(self, coordinates: tuple[int, int], products_info: list[str]):
         self.products_info = products_info
