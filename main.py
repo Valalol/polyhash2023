@@ -17,10 +17,11 @@ class Order:
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int], state: int, weight: int):
+    def __init__(self, coordinates: tuple[int, int], state: int, items_weight: int, item_dict: dict[int]):
         self.state = state  # 0:move,1:deliver,2:load
         self.coordinates = coordinates
-        self.weight = weight
+        self.item_dict = item_dict
+        self.items_weight = items_weight
 
 
 class Map_sections_delimitations:
