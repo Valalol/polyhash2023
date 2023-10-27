@@ -1,21 +1,25 @@
 from __future__ import annotations
 
+
+#stocker les poids des produits:
+#dict[int]
+
 # stocker les objects Warehouse dans une dictionnaire liant un tuple de coordonnées aux objects
 class Warehouse:
-    def __init__(self, coordinates: tuple[int, int], products_info: list[str]):
+    def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
         self.products_info = products_info
         self.coordinates = coordinates
 
 
 class Order:
-    def __init__(self, coordinates: tuple[int, int], item_number: int, items: list[int]):
+    def __init__(self, coordinates: tuple[int, int], item_number: list[int], items: list[int]):
         self.items = items
         self.item_number = item_number
         self.coordinates = coordinates
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int], state: int):
+    def __init__(self, coordinates: tuple[int, int], state: int, item):
         self.state = state  # 0:move,1:deliver,2:load
         self.coordinates = coordinates
 
@@ -29,7 +33,7 @@ class Restrictions:
         self.row_number = row_number
 
 
-class Utilities:
+class Utilities: # can and should be changed ASAP
     def __init__(self):
         self.orders_info: list[Order] = []
         self.orders_number: int | None = None
