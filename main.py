@@ -12,7 +12,7 @@ class Warehouse:
 
 
 class Order:
-    def __init__(self, coordinates: tuple[int, int], item_number: int, items: list[int]):
+    def __init__(self, coordinates: tuple[int, int], item_number: list[int], items: list[int]):
         self.items = items
         self.item_number = item_number
         self.coordinates = coordinates
@@ -33,7 +33,7 @@ class Restrictions:
         self.row_number = row_number
 
 
-class Utilities:
+class Utilities: # can and should be changed ASAP
     def __init__(self):
         self.orders_info: list[Order] = []
         self.orders_number: int | None = None
