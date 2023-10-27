@@ -12,9 +12,8 @@ class Warehouse:
 
 
 class Order:
-    def __init__(self, coordinates: tuple[int, int], item_number: list[int], items: list[int]):
+    def __init__(self, coordinates: tuple[int, int], items: list[int]):
         self.items = items
-        self.item_number = item_number
         self.coordinates = coordinates
 
 
@@ -22,6 +21,7 @@ class Drone:
     def __init__(self, coordinates: tuple[int, int], state: int, item):
         self.state = state  # 0:move,1:deliver,2:load
         self.coordinates = coordinates
+
 
 
 class Restrictions:
@@ -36,7 +36,7 @@ class Map_sections_delimitations:
     def __init__(self, coordinates: tuple[int, int]):
         self.coordinates = coordinates
 
-class Utilities: # can and should be changed ASAP
+class Utilities:# can and should be changed ASAP
     def __init__(self):
         self.orders_info: list[Order] = []
         self.orders_number: int | None = None
