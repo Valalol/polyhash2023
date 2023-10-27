@@ -4,7 +4,7 @@ from __future__ import annotations
 #stocker les poids des produits:
 #dict[int]
 
-
+# stocker les objects Warehouse dans une dictionnaire liant un tuple de coordonnées aux objects
 class Warehouse:
     def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
         self.products_info = products_info
@@ -32,6 +32,9 @@ class Restrictions:
         self.column_number = column_number
         self.row_number = row_number
 
+class Map_sections_delimitations:
+    def __init__(self, coordinates: tuple[int, int]):
+        self.coordinates = coordinates
 
 class Utilities: # can and should be changed ASAP
     def __init__(self):
