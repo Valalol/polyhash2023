@@ -24,7 +24,7 @@ class Drone:
         self.items_weight = items_weight
 
 
-class Map_sections_delimitations:
+class MapSectionsDelimitations:
     def __init__(self, coordinates: tuple[int, int]):
         self.coordinates = coordinates
 
