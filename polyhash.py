@@ -4,6 +4,7 @@
 """Module principal pour la mise en oeuvre du projet Poly#.
 """
 
+from classes import *
 from polyparser import parse_challenge
 # from polysolver import solve, score_solution, save_solution
 from visualizer import *

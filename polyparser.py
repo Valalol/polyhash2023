@@ -3,7 +3,7 @@
 
 """Module de parsing des fichiers d'entrée pour la mise en oeuvre du projet Poly#.
 """
-from main import *
+from classes import *
 
 
 def parse_challenge(filename: str) -> object:
