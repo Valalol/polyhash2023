@@ -27,7 +27,9 @@ if __name__ == "__main__":
                         metavar="sortie.txt")
     args = parser.parse_args()
 
-    challenge = parse_challenge(args.challenge)
+    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = parse_challenge(args.challenge)
+    
+    
     solution = solve(challenge)
     if args.output is not None:
         # Sauvegarder le fichier généré
