@@ -14,7 +14,7 @@ if __name__ == "__main__":
     debug = True
     
     if debug:
-        args = type("Args", (object,), {"challenge": "challenges/d_mother_of_all_warehouses.in", "output": "output/out.txt"})
+        args = type("Args", (object,), {"challenge": "challenges/b_busy_day.in", "output": "output/out.txt"})
     else:
         import argparse
         parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = parse_challenge(args.challenge)
     
-    #heatmap((rows, columns), warehouses_dict, orders_dict)
+    #coverage_map((rows, columns), warehouses_dict, orders_dict)
     
     
     

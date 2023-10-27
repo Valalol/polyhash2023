@@ -1,5 +1,7 @@
 from PIL import Image
 import os
+import math
+import matplotlib.pyplot as plt
 
 def visualize_grid(size: tuple, warehouses_dict, orders_dict):
     img = Image.new('RGB', size, color = 'white')
@@ -51,3 +53,42 @@ def heatmap(size: tuple, warehouses_dict, orders_dict):
     if not os.path.exists('output/'):
         os.makedirs('output/')
     img.save(r'output/heatmap.png')
+
+
+
+def coverage_map(size: tuple, warehouses_dict, orders_dict):
+    radius = 40
+    warehouses_x = [i[1] for i in warehouses_dict.keys()]
+    warehouses_y = [i[0] for i in warehouses_dict.keys()]
+    orders_x = [i[1] for i in orders_dict.keys()]
+    orders_y = [i[0] for i in orders_dict.keys()]
+    
+    fig, ax = plt.subplots()
+    
+    plt.scatter(warehouses_x, warehouses_y, s=50, c='#ffb000', marker='o', alpha=0.7)
+    for i in range(len(warehouses_x)):
+        ax.add_patch(plt.Circle((warehouses_x[i], warehouses_y[i]), radius, color='#37ff00', alpha=0.2))
+    
+    
+    colors = ["#d42708" for _ in range(len(orders_x))]
+    covered = 0
+    for i in range(len(orders_x)):
+        for j in range(len(warehouses_x)):
+            if math.sqrt((orders_x[i] - warehouses_x[j])**2 + (orders_y[i] - warehouses_y[j])**2) < radius:
+                colors[i] = "#34a0ff"
+                covered += 1
+                break
+    
+    print(f"Orders covered: {covered}/{len(orders_x)} ({covered/len(orders_x)*100}%)")
+    
+    plt.scatter(orders_x, orders_y, s=20, c=colors, marker='o', alpha=0.7)
+    
+    
+    plt.xlim(-50, size[1]+50)
+    plt.ylim(-50, size[0]+50)
+    plt.gca().set_aspect('equal')
+    plt.show()
+
+
+
+
