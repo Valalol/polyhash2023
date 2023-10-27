@@ -67,3 +67,6 @@ ce que les entrepots possèdent dans leur zone
 la distance des commandes à lendroit ou il sera et à l'entrepot (l'importance de la distance à l'entrepot varie en fonction de combien d'objets il lui reste)
 
 le nombre d'items par commande
+
+# notes intéressantes sur le sujet
+les drones commencent tous du point 0,0

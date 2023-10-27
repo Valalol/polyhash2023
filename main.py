@@ -1,16 +1,12 @@
 from __future__ import annotations
 
 
-# Données:
-class Product:
-    def __init__(self, coordinates: tuple[int, int], p_type: int, weight: int):
-        self.weight = weight
-        self.coordinates = coordinates
-        self.type = p_type
+#stocker les poids des produits:
+#dict[int]
 
 
 class Warehouse:
-    def __init__(self, coordinates: tuple[int, int], products_info: list[str]):
+    def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
         self.products_info = products_info
         self.coordinates = coordinates
 
@@ -23,7 +19,7 @@ class Order:
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int], state: int):
+    def __init__(self, coordinates: tuple[int, int], state: int, item):
         self.state = state  # 0:move,1:deliver,2:load
         self.coordinates = coordinates
 
