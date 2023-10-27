@@ -70,3 +70,8 @@ le nombre d'items par commande
 
 # notes intéressantes sur le sujet
 les drones commencent tous du point 0,0
+
+# Ce qui pourrait être le plus efficace en fonction du sujet
+prendre/deposer différents items demande plusieurs actions : il faut essayer de transporter 1 type de produit dans un drone
+
+1 drone pourrait faire plusieurs commande d'un seul produit mais attention (il ne peut pas faire une partie de la commande d'un produit  --> 1 type de produit doit etre déposé en entier) ((l'ecxédant ira dans le prochain dépot ou alors il y aurait le nombre exact d'items))
