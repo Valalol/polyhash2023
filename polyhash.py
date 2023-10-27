@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = parse_challenge(args.challenge)
     
-    heatmap((rows, columns), warehouses_dict, orders_dict)
+    #heatmap((rows, columns), warehouses_dict, orders_dict)
     
     
     
