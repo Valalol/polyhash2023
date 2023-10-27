@@ -72,6 +72,20 @@ le nombre d'items par commande
 les drones commencent tous du point 0,0
 
 # Ce qui pourrait être le plus efficace en fonction du sujet
-prendre/deposer différents items demande plusieurs actions : il faut essayer de transporter 1 type de produit dans un drone
+~{prendre/deposer différents items demande plusieurs actions : il faut essayer de transporter 1 type de produit dans un drone}
 
-1 drone pourrait faire plusieurs commande d'un seul produit mais attention (il ne peut pas faire une partie de la commande d'un produit  --> 1 type de produit doit etre déposé en entier) ((l'ecxédant ira dans le prochain dépot ou alors il y aurait le nombre exact d'items))
+~{1 drone pourrait faire plusieurs commande d'un seul produit mais attention (il ne peut pas faire une partie de la commande d'un produit  --> 1 type de produit doit etre déposé en entier) ((l'ecxédant ira dans le prochain dépot ou alors il y aurait le nombre exact d'items))}
+
+en général on a beaucoup de produit différents et les commandes contiennent des produits différents à l'unité
+
+on peut envoyer tous les drones prendre un maximum de produits différents dans une zone avec beaucoup d'entrepots et de commande mais pas trop loin du départ et les faire avancer par nuée pour faire un max de commandes au début
+
+prendre le bon nombre d'objets différentspour pas que ca prenne trop de tours
+(essayer de prendre des items lourds avec des items légers et des moyens entre eux)
+
+# Le plus efficace au niveau des commandes 
+les faire le plus vite possible (on gagne des points en fonction du tour avant la fin)
+
+on regarde une grande zone avec le plus de potentiel (entrepot + commandes / offre + demande), dans cette zonne on regarde une petite zone dans laquelle on va avoir le plus d'offre + demande complètes (commande pouvant etre fait avec produit a proximité) puis en fonction des produit qu'il restent dans les drones et des zones alentours chercher les meilleurs ratios offre + demande
+
+avec le déplacement en nuée, on peut tenter de faire un maximum de commandes très vite

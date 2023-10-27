@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# stocker les poids des produits:
+Weights = dict[int]
 
 class Warehouse:
     def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
@@ -17,6 +19,7 @@ class Drone:
     def __init__(self, coordinates: tuple[int, int], state: int, item):
         self.state = state  # 0:move,1:deliver,2:load
         self.coordinates = coordinates
+
 
 
 class Map_sections_delimitations:
