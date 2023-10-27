@@ -4,35 +4,40 @@
 """Module principal pour la mise en oeuvre du projet Poly#.
 """
 
-# Vous pouvez structurer votre code en modules pour améliorer la
-# compréhension et faciliter le travail collaboratif
 from polyparser import parse_challenge
-from polysolver import solve, score_solution, save_solution
+# from polysolver import solve, score_solution, save_solution
+from visualizer import *
+
+
 
 if __name__ == "__main__":
-    # On fournit ici un exemple permettant de passer un simple
-    # argument (le fichier du challenge) en paramètre. N'hésitez pas à
-    # compléter avec d'autres paramètres/options.
-
-    # Consultez la documentation du module argparse:
-    # https://docs.python.org/3/library/argparse.html
-
-    import argparse
-    parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
-    parser.add_argument('challenge', type=str,
-                        help='challenge definition filename',
-                        metavar="challenge.txt")
-    parser.add_argument('output', type=str, default=None,
-                        help='output filename',
-                        metavar="sortie.txt")
-    args = parser.parse_args()
+    debug = True
+    
+    if debug:
+        args = type("Args", (object,), {"challenge": "challenges/d_mother_of_all_warehouses.in", "output": "output/out.txt"})
+    else:
+        import argparse
+        parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
+        parser.add_argument('challenge', type=str,
+                            help='challenge definition filename',
+                            metavar="challenge.txt")
+        parser.add_argument('output', type=str, default=None,
+                            help='output filename',
+                            metavar="sortie.txt")
+        args = parser.parse_args()
 
     rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = parse_challenge(args.challenge)
     
+    heatmap((rows, columns), warehouses_dict, orders_dict)
     
-    solution = solve(challenge)
-    if args.output is not None:
-        # Sauvegarder le fichier généré
-        save_solution(args.output, solution)
-        print(f"Solution saved in {args.output}")
-    print(f"Score: {score_solution(solution)}")
+    
+    
+    # solution = solve()
+    # if args.output is not None:
+    #     # Sauvegarder le fichier généré
+    #     save_solution(args.output, solution)
+    #     print(f"Solution saved in {args.output}")
+    # print(f"Score: {score_solution(solution)}")
+
+
+# use : python polyhash.py challenges\a_example.in output\out.txt
