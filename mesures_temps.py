@@ -5,7 +5,7 @@ from mathematiks import *
 start_time = time()
 
 for _ in range(10000000):
-    dista((10, 9), (11, 23))
+    taille = 1000
 
 # End timer
 end_time = time()
