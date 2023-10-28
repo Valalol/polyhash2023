@@ -66,7 +66,7 @@ class MapSection:
         self.coordinates = coordinates
         # maybe coordinates here is maybe rendundant
 
-    def set_interest(self, v_interest: int | None = None):
+    def set_interest(self):
         interest = len(self.warehouse_list) * len(self.order_list) * (section_max_drones - self.drone_number)
         self.interest = interest
 
