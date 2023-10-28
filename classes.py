@@ -31,7 +31,7 @@ class Drone:
         self.items_weight = 0
         self.order = None
 
-    def load(self, items: dict[int]):
+    def load(self, items: dict[int], warehouse: Warehouse):
         self.state = 2
         self.items_weight += items_total_weight(items)
 
