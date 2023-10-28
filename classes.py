@@ -20,10 +20,25 @@ class Order:
 
 class Drone:
     def __init__(self, coordinates: tuple[int, int], state: int, items_weight: int, item_dict: dict[int]):
-        self.state = state  # 0:move,1:deliver,2:load
+        self.state = state  # 0:move, 1:deliver, 2:load
         self.coordinates = coordinates
         self.item_dict = item_dict
         self.items_weight = items_weight
+
+
+class Task:
+
+    def __init__(self, end_coordinates: tuple[int, int], drone: Drone):
+        self.drone = drone
+        self.time_travel_left = end_coordinates
+
+    def tick(self):
+        self.time_travel_left -= 1
+
+    def load(self, items: list[int]):
+        drone: Drone = self.drone
+        drone.state = 2
+        drone.items_weight = 1
 
 
 class MapSectionsDelimitations:
@@ -40,7 +55,7 @@ class MapSection:
         self.order_list = order_list
         self.drone_number = drone_number
         self.coordinates = coordinates
-        # maybe coordinates here is rendundant
+        # maybe coordinates here is maybe rendundant
 
     def set_interest(self, v_interest: int | None = None):
         interest = len(self.warehouse_list) * len(self.order_list) * (section_max_drones - self.drone_number)
