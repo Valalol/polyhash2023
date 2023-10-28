@@ -1,4 +1,5 @@
 from __future__ import annotations
+from mathematiks import *
 
 # stocker les poids des produits:
 Weights = dict[int]
@@ -12,18 +13,31 @@ class Warehouse:
         self.coordinates = coordinates
 
 
+warehouse0: Warehouse
+# first warehouse
+
+
 class Order:
-    def __init__(self, coordinates: tuple[int, int], items: list[int]):
+    def __init__(self, coordinates: tuple[int, int], items: dict[int]):
         self.items = items
         self.coordinates = coordinates
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int], state: int, items_weight: int, item_dict: dict[int]):
-        self.state = state  # 0:move, 1:deliver, 2:load
+    def __init__(self, coordinates: tuple[int, int] = warehouse0.coordinates):
+        self.state = None  # 0:move, 1:deliver, 2:load
         self.coordinates = coordinates
-        self.item_dict = item_dict
-        self.items_weight = items_weight
+        self.item_dict = None
+        self.items_weight = 0
+        self.order = None
+
+    def load(self, items: dict[int]):
+        self.state = 2
+        self.items_weight += items_total_weight(items)
+
+    def unload(self, order: Order):
+        self.state = 0
+        self.items_weight += items_total_weight(order.items)
 
 
 class Task:
@@ -34,11 +48,6 @@ class Task:
 
     def tick(self):
         self.time_travel_left -= 1
-
-    def load(self, items: list[int]):
-        drone: Drone = self.drone
-        drone.state = 2
-        drone.items_weight = 1
 
 
 class MapSectionsDelimitations:
