@@ -5,7 +5,7 @@ from mathematiks import *
 start_time = time()
 
 for _ in range(10000000):
-    taille = 1000
+    value = 1
 
 # End timer
 end_time = time()

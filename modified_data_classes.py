@@ -10,7 +10,7 @@ class Itemdict(dict):
             else:
                 self[key] = dict_to_add[key]
 
-    def substract(self, dict_to_sub: Itemdict):
+    def subtract(self, dict_to_sub: Itemdict):
         for key in dict_to_sub.keys():
             if key not in self.keys():
                 raise Exception("1+ items are not available in stock")
