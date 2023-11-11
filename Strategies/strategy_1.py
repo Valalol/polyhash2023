@@ -69,7 +69,7 @@ def solve(challenge_data):
         min,max = 0, len(order_interest_list)-1
         moy = (min + max) // 2
         
-        if index !=2:
+        if index >2:
             while not (order_interest_list[moy][0] <= c_interest <= liste[moy+1][0]):
                 moy = (min + max) // 2
                 if order_interest_list[moy][0] < c_interest:
