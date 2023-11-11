@@ -8,6 +8,17 @@ class Warehouse:
     def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
         self.products_info = products_info
         self.coordinates = coordinates
+    
+    def contains(self, products: int | list[int]):
+        contain: bool = True
+        if product is not list:
+            if self.products_info[product] = 0:
+                contain = False
+        else:
+            for product in products:
+                if self.products_info[product] = 0:
+                    contain = False
+        return contain
 
 
 class Order:
