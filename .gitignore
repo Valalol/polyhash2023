@@ -10,3 +10,4 @@ venv.bak/
 .idea/
 output/
 .vscode/settings.json
+annals.py
