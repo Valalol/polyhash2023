@@ -1,20 +1,13 @@
 from __future__ import annotations
 from mathematiks import *
-
-# stocker les poids des produits:
-Weights = dict[int]
-
-section_max_drones = 2
+from math import ceil
+from modified_data_classes import *
 
 
 class Warehouse:
     def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
         self.products_info = products_info
         self.coordinates = coordinates
-
-
-warehouse0: Warehouse
-# first warehouse
 
 
 class Order:
@@ -24,24 +17,49 @@ class Order:
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int] = warehouse0.coordinates):
+    def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: dict[int]):
         self.state = None  # 0:move, 1:deliver, 2:load
         self.coordinates = coordinates
-        self.item_dict = None
-        self.items_weight = 0
-        self.order = None
+        self.item_dict = {}
+        self.current_load = 0
+        self.max_load = max_load
+        self.turns_left = 0
+        self.item_weights = item_weights
 
-    def load(self, items: dict[int], warehouse: Warehouse):
+    def load(self, items: dict[int]):
+        assert not self.drone_busy()
         self.state = 2
-        self.items_weight += items_total_weight(items)
+        self.item_dict = dict_add(self.item_dict, items)
+        self.current_load += items_total_weight(self.item_weights, items)
+        assert self.current_load <= 200
 
-    def unload(self, order: Order):
+    def unload(self, items: dict[int]):
+        assert not self.drone_busy()
+        self.state = 1
+        self.item_dict = dict_subtract(self.item_dict, items)
+    
+    def travel(self, coordinates: tuple[int, int]):
+        assert not self.drone_busy()
         self.state = 0
-        self.items_weight += items_total_weight(order.items)
+        self.turns_left = ceil(dist(self.coordinates, coordinates))
+        self.coordinates = coordinates
+    
+    def wait(self, turns: int):
+        assert not self.drone_busy()
+        self.state = 0
+        self.turns_left = turns
+    
+    def drone_busy(self):
+        return self.turns_left > 0
+    
+    def tick(self):
+        if self.drone_busy():
+            self.turns_left -= 1
+        else:
+            pass
 
 
 class Task:
-
     def __init__(self, end_coordinates: tuple[int, int], drone: Drone):
         self.drone = drone
         self.time_travel_left = end_coordinates
@@ -56,9 +74,8 @@ class MapSectionsDelimitations:
 
 
 class MapSection:
-
     def __init__(self, coordinates: tuple[int, int], warehouse_list: list[Warehouse], order_list: list[Order],
-                 drone_number: int):
+                drone_number: int):
         self.interest = None
         self.warehouse_list = warehouse_list
         self.order_list = order_list
@@ -67,6 +84,7 @@ class MapSection:
         # maybe coordinates here is maybe rendundant
 
     def set_interest(self):
+        section_max_drones = 2
         interest = len(self.warehouse_list) * len(self.order_list) * (section_max_drones - self.drone_number)
         self.interest = interest
 

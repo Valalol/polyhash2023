@@ -38,7 +38,7 @@ def parse_challenge(filename: str) -> object:
     orders_dict = {}
     for _ in range(order_number):
         x, y = data[index]
-        order_info: dict[int] = data[index + 2]
+        order_info: list[int] = data[index + 2]
         index += 3
         order = Order(coordinates=(x, y), items=order_info)
         orders_dict[(x, y)] = order
