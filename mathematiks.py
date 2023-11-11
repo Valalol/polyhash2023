@@ -12,4 +12,3 @@ def items_total_weight(item_weights: list[int], items_list: dict[int]):
         quantity = items_list[item]
         somme += item_weights[item] * quantity
     return somme
-

@@ -41,21 +41,21 @@ class Drone:
         self.current_load -= items_total_weight(self.item_weights, items)
         self.turns_left = len(items)
         assert 0 <= self.current_load <= self.max_load
-    
+
     def travel(self, coordinates: tuple[int, int]):
         assert not self.drone_busy()
         self.state = 0
         self.turns_left = ceil(dist(self.coordinates, coordinates))
         self.coordinates = coordinates
-    
+
     def wait(self, turns: int):
         assert not self.drone_busy()
         self.state = 0
         self.turns_left = turns
-    
+
     def drone_busy(self):
         return self.turns_left > 0
-    
+
     def tick(self):
         if self.drone_busy():
             self.turns_left -= 1
@@ -79,7 +79,7 @@ class MapSectionsDelimitations:
 
 class MapSection:
     def __init__(self, coordinates: tuple[int, int], warehouse_list: list[Warehouse], order_list: list[Order],
-                drone_number: int):
+                 drone_number: int):
         self.interest = None
         self.warehouse_list = warehouse_list
         self.order_list = order_list
