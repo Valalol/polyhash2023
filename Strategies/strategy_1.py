@@ -61,32 +61,14 @@ def solve(challenge_data):
 
     order_interest_list = [] #list[int, Order, Warehouse]
     #sort orders by interest:
+    
     for index,order in enumerate(orders_dict.values()):
         
         interest, warehouse = interest_funct(order, warehouses_dict)
-        
-        #inserts the order_info in a sorted way:
-        min,max = 0, len(order_interest_list)-1
-        moy = (min + max) // 2
-        
-        if index >2:
-            while not (order_interest_list[moy][0] <= c_interest <= liste[moy+1][0]):
-                moy = (min + max) // 2
-                if order_interest_list[moy][0] < c_interest:
-                    min = moy + 1
-                else:
-                    max = moy - 1
-                order_interest_list.insert(moy+1, [c_interest, order, warehouse])
-                continue
-        
-        elif index == 1:
-            order_interest_list.append([c_interest, order, warehouse])
-        elif index == 2:
-            if order_interest_list[0] > c_interest:
-                order_interest_list.insert(0, [c_interest, order, warehouse])
-            else:
-                order_interest_list.append([c_interest, order, warehouse])
-
+        order_interest_list.append([interest, order, warehouse])
+    
+    order_interest_list.sort(key=lambda x: x[0])
+    
     warehouse_dict_current_state = warehouses_dict.copy()
     warehouses_dict_new = warehouses_dict.copy()
     for warehouse in warehouses_dict_new.values():
