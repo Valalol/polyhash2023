@@ -3,16 +3,20 @@ from new_data_classes import *
 # calulating the worth of each command:
 max_dist = 1000
 
-#Arbitrary coefficients used for caclulating the value of interest of a command:
-items_weight_coeff: int = 1
-items_weight_pow: int = 1
-items_num_coeff: int = 1
-items_num_pow: int = 1
-command_dist_coeff: int = 1
-command_dist_pow: int = 1
-
 # calculate the interest of a given order
-def interest_funct(order: Order,warehouses_dict: dict):
+def interest_funct(order: Order, warehouses_dict: dict,
+                   items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
+                   items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
+                   command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
+    
+    items_weight_coeff = items_weight_coeff
+    items_weight_pow  = items_weight_pow
+    items_num_coeff = items_num_coeff
+    items_num_pow  = items_num_pow
+    command_dist_coeff = command_dist_coeff
+    command_dist_pow  = command_dist_pow
+    
+    
     
     #calculate the weight of the order
     weight_value: int = 0
