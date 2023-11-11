@@ -11,19 +11,6 @@ items_num_pow: int = 1
 command_dist_coeff: int = 1
 command_dist_pow: int = 1
 
-def find_nearest_warehouse(coordinates, warehouses_dict):
-    
-    min_dist: int = max_dist
-    warehouse: Warehouse | None = None
-    
-    for warehouse in warehouse_dict.values():
-        
-        distance: int = dist(coordinates, warehouse.coordinates)
-        if distance < min_dist:
-            min_dist = distance
-            
-    return warehouse
-
 # calculate the interest of a given order
 def interest_funct(order: Order,warehouses_dict: dict):
     
