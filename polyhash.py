@@ -6,8 +6,8 @@
 
 from classes import *
 from polyparser import parse_challenge
-# from polysolver import solve, score_solution, save_solution
-from visualizer import *
+from polysolver import solve # , score_solution, save_solution
+import visualizer
 
 
 
@@ -27,13 +27,14 @@ if __name__ == "__main__":
                             metavar="sortie.txt")
         args = parser.parse_args()
 
-    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = parse_challenge(args.challenge)
+    challenge_data = parse_challenge(args.challenge) # challenge_data = (rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict)
     
-    #coverage_map((rows, columns), warehouses_dict, orders_dict)
+    visualizer.simple_summary(*challenge_data)
     
     
+    solution = solve(challenge_data, solve_strategy=0)
+    print(solution)
     
-    # solution = solve()
     # if args.output is not None:
     #     # Sauvegarder le fichier généré
     #     save_solution(args.output, solution)
