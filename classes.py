@@ -11,13 +11,13 @@ class Warehouse:
 
 
 class Order:
-    def __init__(self, coordinates: tuple[int, int], items: dict[int]):
+    def __init__(self, coordinates: tuple[int, int], items: list[int]):
         self.items = items
         self.coordinates = coordinates
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: dict[int]):
+    def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: list[int]):
         self.state = None  # 0:move, 1:deliver, 2:load
         self.coordinates = coordinates
         self.item_dict = {}
@@ -31,12 +31,16 @@ class Drone:
         self.state = 2
         self.item_dict = dict_add(self.item_dict, items)
         self.current_load += items_total_weight(self.item_weights, items)
-        assert self.current_load <= 200
+        self.turns_left = len(items)
+        assert 0 <= self.current_load <= self.max_load
 
     def unload(self, items: dict[int]):
         assert not self.drone_busy()
         self.state = 1
         self.item_dict = dict_subtract(self.item_dict, items)
+        self.current_load -= items_total_weight(self.item_weights, items)
+        self.turns_left = len(items)
+        assert 0 <= self.current_load <= self.max_load
     
     def travel(self, coordinates: tuple[int, int]):
         assert not self.drone_busy()
