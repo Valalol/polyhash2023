@@ -6,18 +6,17 @@
 
 from classes import *
 from polyparser import parse_challenge
-from polysolver import solve # , score_solution, save_solution
+from polysolver import solve  # , score_solution, save_solution
 import visualizer
-
-
 
 if __name__ == "__main__":
     debug = True
-    
+
     if debug:
         args = type("Args", (object,), {"challenge": "challenges/b_busy_day.in", "output": "output/out.txt"})
     else:
         import argparse
+
         parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
         parser.add_argument('challenge', type=str,
                             help='challenge definition filename',
@@ -27,19 +26,18 @@ if __name__ == "__main__":
                             metavar="sortie.txt")
         args = parser.parse_args()
 
-    challenge_data = parse_challenge(args.challenge) # challenge_data = (rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict)
-    
+    challenge_data = parse_challenge(args.challenge)
+    # challenge_data = (rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict)
+
     visualizer.simple_summary(*challenge_data)
-    
-    
+
     solution = solve(challenge_data, solve_strategy=0)
     print(solution)
-    
+
     # if args.output is not None:
     #     # Sauvegarder le fichier généré
     #     save_solution(args.output, solution)
     #     print(f"Solution saved in {args.output}")
     # print(f"Score: {score_solution(solution)}")
-
 
 # use : python polyhash.py challenges\a_example.in output\out.txt

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 def dict_add(dict_original, dict_to_add):
     for key in dict_to_add.keys():
         if key in dict_original.keys():
@@ -7,6 +8,7 @@ def dict_add(dict_original, dict_to_add):
         else:
             dict_original[key] = dict_to_add[key]
     return dict_original
+
 
 def dict_subtract(dict_original, dict_to_sub):
     for key in dict_to_sub.keys():
