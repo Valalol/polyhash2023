@@ -21,6 +21,7 @@ def solve(challenge_data: list, solve_strategy: int = 1):
         - products_weight (list): A list containing the weight of each product type.
         - warehouses_dict (dict): A dictionary containing the warehouses information.
         - orders_dict (dict): A dictionary containing the orders information.
+            - order_info (list): A list containing the order information. Wich are : list of items
     - solve_strategy (int): An integer representing the strategy to use for solving the challenge data.
     
     Returns:
