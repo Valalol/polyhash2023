@@ -9,3 +9,4 @@ env.bak/
 venv.bak/
 .idea/
 output/
+.vscode/settings.json
