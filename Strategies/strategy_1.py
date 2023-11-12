@@ -112,13 +112,13 @@ def solve(challenge_data):
     
     warehouse0 = list(warehouses_dict_new.values())[0]
     drones_info = []
-    for _ in range  (drone_count):
+    for i in range  (drone_count):
         
         
         order_index = 0
         product_index = 0
         drone_state = 2
-        drone = Drone(warehouse0.coordinates, max_load, products_weight)
+        drone = Drone(warehouse0.coordinates, max_load, products_weight, i)
         drones_info.append(drone, [order_index, product_index])
         drone.state = drone_state
         drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)

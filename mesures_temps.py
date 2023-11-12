@@ -1,15 +1,9 @@
-from time import *
-from mathematiks import *
+import time
 
-# Start timer
-start_time = time()
-
-for _ in range(10000000):
-    value = 1
-
-# End timer
-end_time = time()
-
-# Calculate elapsed time
-elapsed_time = end_time - start_time
-print("Elapsed time: ", elapsed_time)
+def time_measurement(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        print(f"Function {func.__name__} took {time.time() - start} seconds")
+        return result
+    return wrapper

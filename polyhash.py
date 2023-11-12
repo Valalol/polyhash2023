@@ -6,14 +6,15 @@
 
 from classes import *
 from polyparser import parse_challenge
-from polysolver import solve  # , score_solution, save_solution
+from polysolver import solve, score_solution, save_solution
 import visualizer
+import mesures_temps
 
 if __name__ == "__main__":
     debug = True
 
     if debug:
-        args = type("Args", (object,), {"challenge": "challenges/b_busy_day.in", "output": "output/out.txt"})
+        args = type("Args", (object,), {"challenge": "challenges/b_busy_day.in", "output": None})
     else:
         import argparse
 
@@ -32,12 +33,12 @@ if __name__ == "__main__":
     visualizer.simple_summary(*challenge_data)
 
     solution = solve(challenge_data, solve_strategy=0)
-    print(solution)
+    #print(solution)
 
-    # if args.output is not None:
-    #     # Sauvegarder le fichier généré
-    #     save_solution(args.output, solution)
-    #     print(f"Solution saved in {args.output}")
-    # print(f"Score: {score_solution(solution)}")
+    if args.output is not None:
+        # Sauvegarder le fichier généré
+        save_solution(args.output, solution)
+        print(f"Solution saved in {args.output}")
+    print(f"Score: {score_solution(solution)}")
 
 # use : python polyhash.py challenges\a_example.in output\out.txt

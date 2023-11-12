@@ -5,30 +5,31 @@ from modified_data_classes import *
 
 
 class Warehouse:
-    def __init__(self, coordinates: tuple[int, int], products_info: dict[int]):
+    def __init__(self, coordinates: tuple[int, int], products_info: dict[int], warehouse_id: int = 0):
         self.products_info = products_info
         self.coordinates = coordinates
+        self.warehouse_id = warehouse_id
     
     def contains(self, products: int | list[int]):
-        contain: bool = True
         if products is not list:
             if self.products_info[products] == 0:
-                contain = False
+                return False
         else:
             for product in products:
                 if self.products_info[product] == 0:
-                    contain = False
-        return contain
+                    return False
+        return True
 
 
 class Order:
-    def __init__(self, coordinates: tuple[int, int], items: list[int]):
+    def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int = 0):
         self.items = items
         self.coordinates = coordinates
+        self.order_id = order_id
 
 
 class Drone:
-    def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: list[int]):
+    def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: list[int], drone_id: int = 0):
         self.state = None  # 0:move, 1:deliver, 2:load
         self.coordinates = coordinates
         self.item_dict = {}
@@ -36,6 +37,7 @@ class Drone:
         self.max_load = max_load
         self.turns_left = 0
         self.item_weights = item_weights
+        self.drone_id = drone_id
 
     def load(self, items: dict[int]):
         assert not self.drone_busy()

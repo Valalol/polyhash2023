@@ -5,9 +5,11 @@
 """
 
 from classes import *
-import Strategies.strategy_1 as strategy_1
+import strategies.strategy_0 as strategy_0
+import strategies.strategy_1 as strategy_1
+import mesures_temps
 
-
+@mesures_temps.time_measurement
 def solve(challenge_data: list, solve_strategy: int = 1):
     """
     Solves the given challenge data using the specified strategy.
@@ -26,88 +28,43 @@ def solve(challenge_data: list, solve_strategy: int = 1):
     - solve_strategy (int): An integer representing the strategy to use for solving the challenge data.
     
     Returns:
-    - solution (list): A list containing the solution to the challenge data.
+    - solution (str): A text containing the solution to the challenge data.
     """
-def solve(challenge_data: list, solve_strategy: int = 1):
-    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
     
     if solve_strategy == 0:
-        # Dumb brute force solution
-        # starts with the first order and uses only one drone
-        tick = 0
-        order_index = 0
-        orders = list(orders_dict.values())
-        drone = Drone(list(warehouses_dict.keys())[0], max_load, products_weight)
-        
-        while tick < deadline and order_index < len(orders):
-            product_index = 0
-            order = orders[order_index]
-            
-            state = 2
-            
-            while tick < deadline and product_index < len(order.items):
-                product_type = order.items[product_index]
-                
-                drone.tick()
-                tick += 1
-                
-                if drone.drone_busy():
-                    continue
-                    
-                
-                if state == 3:
-                    drone.load({product_type: 1})
-                    print(f"Loaded product {product_type} at tick {tick}")
-                    state = 0   
-                
-                elif state == 0:
-                    drone.travel(order.coordinates)
-                    print(f"Started travelling with product index {product_index} for order {order_index} at tick {tick}")
-                    state = 1
-                
-                elif state == 1:
-                    drone.unload({product_type: 1})
-                    print(f"Unloaded product {product_type} at tick {tick}")
-                    product_index += 1
-                    order.items.remove(product_type)
-                    if len(order.items) == 0:
-                        order_index += 1
-                        order = orders[order_index]
-                        print(f"Order {order_index} completed at tick {tick}")
-                    state = 2
-                
-                elif state == 2:
-                    for warehouse in warehouses_dict.values():
-                        if warehouse.products_info[product_type] > 0:
-                            warehouse_coordinates = warehouse.coordinates
-                            break
-                    drone.travel(warehouse_coordinates)
-                    print(f"Started travelling to warehouse ({warehouse_coordinates}) at tick {tick}")
-                    state = 3
+        solution = strategy_0.solve(challenge_data)
     
-    
-    
-    
-    if solve_strategy == 1:
-        # sort orders by the sum of the distances between the warehouse and the orders for each product type 
-        # (the order with the smallest sum is processed first)
-        def difficulty_score(order):
-            weight_sum = sum(products_weight[i] for i in order.items)
-            print(weight_sum)
-        
-        
-        orders = list(orders_dict.values())
-        orders_and_scores = [(order, difficulty_score(order)) for order in orders]
-        
-        # TODO: UNFINISHED
-    if solve_strategy == 2:
+    elif solve_strategy == 1:
         solution = strategy_1.solve(challenge_data)
-        
-        
-        
     
+    return solution
+
+def score_solution(solution: str):
+    """
+    Scores the given solution.
     
+    Args:
+    - solution (str): A text containing the solution to the challenge data.
     
+    Returns:
+    - score (int): The score of the given solution.
+    """
     
+    score = 0
     
-    # TODO: implement other strategies by adding elif blocks
+    return score
+
+def save_solution(filename: str, solution: str):
+    """
+    Saves the given solution to the specified file.
+    
+    Args:
+    - filename (str): The name of the file to save the solution to.
+    - solution (str): A text containing the solution to the challenge data.
+    """
+    
+    with open(filename, "w") as file:
+        file.write(solution)
+    
+    return None
+
