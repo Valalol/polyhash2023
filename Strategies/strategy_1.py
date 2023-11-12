@@ -1,10 +1,11 @@
 from mathematiks import dist
+from utils import find_nearest_warehouse
 from classes import *
 # calulating the worth of each command:
 max_dist = 1000
 
 # calculate the interest of a given order
-def interest_funct(order: Order, warehouses_dict: dict, products_weight: list,
+def interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_weight: list,
                    items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
                    items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
@@ -57,20 +58,26 @@ def interest_funct(order: Order, warehouses_dict: dict, products_weight: list,
     
     return total_interest, closest_warehouse
 
+def choosing_warehouse(warehouses_dict: dict, drone: Drone, max_dist: int):
+    warehouse = find_nearest_warehouse(drone.coordinates, warehouses_dict, max_dist)
+    warehouses_dict.pop(warehouse.coordinates)
+    return warehouse, warehouses_dict
 
 def solve(challenge_data):
     
     rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
+    max_dist = rows + columns
 
     order_interest_list = [] #list[int, Order, Warehouse]
     #sort orders by interest:
     
     for index,order in enumerate(orders_dict.values()):
         
-        interest, warehouse = interest_funct(order, warehouses_dict)
+        interest, warehouse = interest_funct(order, max_dist, warehouses_dict)
         order_interest_list.append([interest, order, warehouse])
     
     order_interest_list.sort(key=lambda x: x[0])
+    
     
     warehouse_dict_current_state = warehouses_dict.copy()
     warehouses_dict_new = warehouses_dict.copy()
@@ -95,60 +102,79 @@ def solve(challenge_data):
             #does nothing for now
             pass
     
+    
+    # using drones
     tick = 0
     order_index = 0
     warehouse0 = list(warehouses_dict_new.values())[0]
     orders = warehouse.products_info
     drone = Drone(warehouse0.coordinates, max_load, products_weight)
+    drones_info = []
+    for _ in range  (drone_count):
+        
+        order_index = 0
+        product_index = 0
+        drone_state = 2
+        
+        drones_info.append(Drone(warehouse0.coordinates, max_load, products_weight), None)
+        drones_info[1] = [order_index, product_index]
+        drone.state = drone_state
+        drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)
     
     while tick < deadline and order_index < len(orders):
-        product_index = 0
-        order = orders[order_index]
         
-        state = 2
-        
-        while tick < deadline and product_index < len(order.items):
-            product_type = order.items[product_index]
-            
-            drone.tick()
+        for drone, warehouse in drones_info:
             tick += 1
-            
+            drone.tick()
             if drone.drone_busy():
-                continue
+                    continue
+            
+            else:
                 
-            
-            if state == 3:
-                drone.load({product_type: 1})
-                print(f"Loaded product {product_type} at tick {tick}")
-                state = 0   
-            
-            elif state == 0:
-                drone.travel(order.coordinates)
-                print(f"Started travelling with product index {product_index} for order {order_index} at tick {tick}")
-                state = 1
-            
-            elif state == 1:
-                drone.unload({product_type: 1})
-                print(f"Unloaded product {product_type} at tick {tick}")
-                product_index += 1
-                order.items.remove(product_type)
-                if len(order.items) == 0:
-                    order_index += 1
-                    order = orders[order_index]
-                    print(f"Order {order_index} completed at tick {tick}")
-                state = 2
-            
-            elif state == 2:
-                for warehouse in warehouses_dict.values():
-                    if warehouse.products_info[product_type] > 0:
-                        warehouse_coordinates = warehouse.coordinates
-                        break
-                drone.travel(warehouse_coordinates)
-                print(f"Started travelling to warehouse ({warehouse_coordinates}) at tick {tick}")
-                state = 3
-    
-    
+                #checks that the order is not already complete
+                
+                #check that the maximum number or order from the warehouse is not already reached
+                
+                product_type = order.items[product_index]
+                
+                if drone.state == 3:
+                    
+                    drone.load({product_type: 1})
+                    print(f"Loaded product {product_type} at tick {tick}")
+                    drone.state = 0   
+                
+                elif drone.state == 0:
+                    
+                    drone.travel(order.coordinates)
+                    print(f"Started travelling with product index {product_index} for order {order_index} at tick {tick}")
+                    drone.state = 1
+                
+                elif drone.state == 1:
+                    
+                    drone.unload({product_type: 1})
+                    print(f"Unloaded product {product_type} at tick {tick}")
+                    product_index += 1
+                    order.items.remove(product_type)
+                    
+                    #checks if the order is completed
+                    if len(order.items) == 0:
+                        
+                        print(f"Order {order_index} completed at tick {tick}")
+                        order_index += 1
+                        product_index = 0
+                        drone.state = 2
+                        
+                        #check that the maximum number or order from the warehouse is not already reached
+                        if order_index < len(warehouse.products_info):
+                            order = orders[order_index]
+                        else:
+                            drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)
+                            
+                    drone.state = 2
+                
+                elif drone.state == 2:
+                    
+                    drone.travel(warehouse.coordinates)
+                    print(f"Started travelling to warehouse ({warehouse.coordinates}) at tick {tick}")
+                    state = 3
         
-    
-        
-    
