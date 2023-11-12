@@ -1,11 +1,11 @@
 from mathematiks import dist
 from utils import find_nearest_warehouse
 from classes import *
-# calulating the worth of each command:
-max_dist = 1000
+from strategies.strategy1 import *
+
 
 # calculate the interest of a given order
-def interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_weight: list,
+def order_interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_weight: list,
                    items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
                    items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
@@ -49,6 +49,19 @@ def interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_
     
     return total_interest, closest_warehouse
 
+def interest_warehouse_funct(warehouse: Warehouse, drone: Drone, warehouse_orders: dict, max_dist: int,
+                             warehouse_dist_coeff: int | None = 1, warehouse_dist_pow: int | None = 1,
+                             warehouse_content_coeff: int | None = 1, warehouse_content_pow: int | None =1):
+    orders_value: int = 0
+    #sums the interest of the orders in the warehouse
+    for order in warehouse_orders[warehouse.coordinates]:
+        orders_value += order
+        
+
+
+
+
+
 def choosing_warehouse(warehouses_dict: dict, drone: Drone, max_dist: int):
     warehouse = find_nearest_warehouse(drone.coordinates, warehouses_dict, max_dist)
     warehouses_dict.pop(warehouse.coordinates)
@@ -64,7 +77,7 @@ def solve(challenge_data):
     
     for index,order in enumerate(orders_dict.values()):
         
-        interest, warehouse = interest_funct(order, warehouses_dict, max_dist,  products_weight)
+        interest, warehouse = order_interest_funct(order, warehouses_dict, max_dist,  products_weight)
         order_interest_list.append([interest, order, warehouse])
     
     order_interest_list.sort(key=lambda x: x[0])
