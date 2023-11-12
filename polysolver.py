@@ -5,6 +5,7 @@
 """
 
 from classes import *
+import Strategies.strategy_1 as strategy_1
 
 
 def solve(challenge_data: list, solve_strategy: int = 1):
@@ -99,7 +100,11 @@ def solve(challenge_data: list, solve_strategy: int = 1):
         orders_and_scores = [(order, difficulty_score(order)) for order in orders]
         
         # TODO: UNFINISHED
-    
+    if solve_strategy == 2:
+        solution = strategy_1.solve(challenge_data)
+        
+        
+        
     
     
     
