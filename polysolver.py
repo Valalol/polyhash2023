@@ -7,6 +7,7 @@
 from classes import *
 import strategies.strategy_0 as strategy_0
 import strategies.strategy_1 as strategy_1
+from polyparser import parse_challenge
 import mesures_temps
 
 @mesures_temps.time_measurement
@@ -67,4 +68,8 @@ def save_solution(filename: str, solution: str):
         file.write(solution)
     
     return None
+
+if __name__ == "__main__":
+    challenge_data = parse_challenge("challenges/a_example.in")
+    print(solve(challenge_data,1))
 
