@@ -34,7 +34,9 @@ class Warehouse:
         return True
     
     def remove_products(self, products: dict[int] | list[int]):
+        
         if self.contains(products):
+            
             if products is dict: #dict[product_type] -> product_number
                 for product_type, product_number in products.items():
                     self.products_info[product_type] -= product_number
@@ -42,6 +44,7 @@ class Warehouse:
             elif products is list: #dict[index] -> product_type
                 for product_type in products:
                     self.products_info[product_type] -= product_number
+                    
         else:
             raise ValueError("The warehouse does not contain at least one product.")
 
@@ -59,6 +62,7 @@ class Order:
         self.coordinates = coordinates
         self.order_id = order_id
     
+    #functions that checks if the drones contains t
     def require(self, products: dict[int]):
         for product in products:
             if self.items.count(product) < products[product]:
