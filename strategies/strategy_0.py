@@ -17,10 +17,10 @@ def solve(challenge_data):
         product_index = 0
         order = orders[order_index]
         
-        state = 2
+        state = 0
         
-        while tick < deadline and product_index < len(order.items):
-            product_type = order.items[product_index]
+        while tick < deadline and len(order.items) > 0:
+            product_type = order.items[0]
             
             drone.tick()
             tick += 1
@@ -29,39 +29,30 @@ def solve(challenge_data):
                 continue
                 
             
-            if state == 3:
-                drone.load({product_type: 1})
-                print(f"Loaded product {product_type} at tick {tick}")
-                state = 0
-            
-            elif state == 0:
-                drone.travel(order.coordinates)
-                print(f"Started travelling with product index {product_index} for order {order_index} at tick {tick}")
-                solution += f"0 D {order_index} {product_type} 1\n"
-                state = 1
-            
-            elif state == 1:
-                drone.unload({product_type: 1})
-                print(f"Unloaded product {product_type} at tick {tick}")
-                product_index += 1
-                order.items.remove(product_type)
-                if len(order.items) == 0:
-                    order_index += 1
-                    order = orders[order_index]
-                    print(f"Order {order_index} completed at tick {tick}")
-                state = 2
-            
-            elif state == 2:
+            if state == 0:
                 selected_warehouse = None
                 for warehouse in warehouses_dict.values():
                     if warehouse.products_info[product_type] > 0:
                         selected_warehouse = warehouse
                         break
-                drone.travel(selected_warehouse.coordinates)
-                print(f"Started travelling to warehouse ({selected_warehouse.coordinates}) at tick {tick}")
+                drone.load({product_type: 1}, selected_warehouse)
+                print(f"Started loading product {product_type} from warehouse {selected_warehouse.warehouse_id} at tick {tick}")
                 solution += f"0 L {selected_warehouse.warehouse_id} {product_type} 1\n"
-                state = 3
+                state = 1
+            
+            elif state == 1:
+                drone.deliver({product_type: 1}, order)
+                print(f"Started delivering product {product_type} for order {order_index} at tick {tick}")
+                solution += f"0 D {order_index} {product_type} 1\n"
+                product_index += 1
+                if len(order.items) == 0:
+                    print(f"Order {order_index} completed at tick {tick}")
+                    order_index += 1
+                    order = orders[order_index]
+                state = 0
+    
     
     solution = solution[:-1]
-    solution = f"{len(solution)}\n{solution}"
+    commands_amount = len(solution.split('\n'))
+    solution = f"{commands_amount}\n{solution}"
     return solution
