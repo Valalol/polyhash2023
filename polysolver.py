@@ -6,7 +6,7 @@
 
 from classes import *
 import strategies.strategy_0 as strategy_0
-import strategies.strategy_1 as strategy_1
+import strategies.strategy1.strategy_1 as strategy_1
 from polyparser import parse_challenge
 import mesures_temps
 
