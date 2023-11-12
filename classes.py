@@ -22,13 +22,13 @@ class Warehouse:
     def contains(self, products: dict[int] | list[int]):
         
         if products is dict: #dict[product_type] -> product_number
-            for product,number in products.items():
-                if self.products_info[product] < number:
+            for product_type, product_number in products.items():
+                if self.products_info[product_type] <product_number:
                     return False
         
         elif products is list: #dict[index] -> product_type
-            for product in products:
-                if self.products_info[product] < 1:
+            for product_type in products:
+                if self.products_info[product_type] < 1:
                     return False
         
         return True
