@@ -10,15 +10,6 @@ def interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_
                    items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
     
-    items_weight_coeff = items_weight_coeff
-    items_weight_pow  = items_weight_pow
-    items_num_coeff = items_num_coeff
-    items_num_pow  = items_num_pow
-    command_dist_coeff = command_dist_coeff
-    command_dist_pow  = command_dist_pow
-    
-    
-    
     #calculate the weight of the order
     weight_value: int = 0
     #sums the weight of the items in the order
@@ -29,8 +20,8 @@ def interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_
     
     #calculate minimum distance of a warehouse who has the items & registers the warehouse
     min_distance_value: int = max_dist
-    closest_warehouse: Warehouse = None
-    
+    closest_warehouse: Warehouse = list(warehouses_dict.values())[0]
+    print(warehouses_dict)
     for warehouse in warehouses_dict.values():
         as_items: bool = True
 
@@ -73,16 +64,15 @@ def solve(challenge_data):
     
     for index,order in enumerate(orders_dict.values()):
         
-        interest, warehouse = interest_funct(order, max_dist, warehouses_dict)
+        interest, warehouse = interest_funct(order, warehouses_dict, max_dist,  products_weight)
         order_interest_list.append([interest, order, warehouse])
     
     order_interest_list.sort(key=lambda x: x[0])
     
-    
-    warehouse_dict_current_state = warehouses_dict.copy()
-    warehouses_dict_new = warehouses_dict.copy()
-    for warehouse in warehouses_dict_new.values():
-        warehouse.products_info = []
+    #list[warehouse.id]->[order.ids]
+    warehouse_orders= {}
+    for warehouse in warehouses_dict.values():
+        warehouse_orders[warehouse.coordinates] = []
     
     for order in order_interest_list:
         c_interest, order, warehouse = tuple(order)
@@ -96,8 +86,8 @@ def solve(challenge_data):
         #if the items are in the warehouse then it removes them from the warehouse and adds the order to the new warehouse_dict
         if is_in_warehouse :
             for item in order.items:
-                warehouse_dict_current_state[warehouse.coordinates].products_info[item] -= 1
-            warehouses_dict_new(warehouse.coordinates).products_info.append(order)
+                warehouses_dict[warehouse.coordinates].products_info[item] -= 1
+            warehouse_orders[warehouse.coordinates].append(order)
         else:
             #does nothing for now
             pass
@@ -106,11 +96,11 @@ def solve(challenge_data):
     # using drones
     
     total_order_number: int = 0
-    for warehouse in warehouses_dict_new.values():
-        total_order_number += len(warehouse.products_info)
+    for warehouse in warehouse_orders.values():
+        total_order_number += len(warehouse_orders)
     total_order_index: int = 0
     
-    warehouse0 = list(warehouses_dict_new.values())[0]
+    warehouse0 = list(warehouses_dict.values())[0]
     drones_info = []
     for i in range  (drone_count):
         
@@ -119,9 +109,9 @@ def solve(challenge_data):
         product_index = 0
         drone_state = 2
         drone = Drone(warehouse0.coordinates, max_load, products_weight, i)
-        drones_info.append(drone, [order_index, product_index])
+        drones_info.append([drone, [order_index, product_index]])
         drone.state = drone_state
-        drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)
+        drone.warehouse, warehouse_orders = choosing_warehouse(warehouses_dict, drone, max_dist)
     
     tick = 0
     while tick < deadline and total_order_index < total_order_number:
@@ -168,7 +158,7 @@ def solve(challenge_data):
                         if order_index < len(warehouse.products_info):
                             order = warehouse.products_info[order_index]
                         else:
-                            drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)
+                            drone.warehouse, warehouse_orders = choosing_warehouse(warehouse_orders, drone, max_dist)
                             
                     drone.state = 2
                 
