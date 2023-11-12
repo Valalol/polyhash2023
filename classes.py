@@ -12,11 +12,11 @@ class Warehouse:
     def contains(self, products: int | list[int]):
         contain: bool = True
         if product is not list:
-            if self.products_info[product] = 0:
+            if self.products_info[product] == 0:
                 contain = False
         else:
             for product in products:
-                if self.products_info[product] = 0:
+                if self.products_info[product] == 0:
                     contain = False
         return contain
 
