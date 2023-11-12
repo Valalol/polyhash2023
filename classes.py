@@ -19,10 +19,18 @@ class Warehouse:
         self.coordinates = coordinates
         self.warehouse_id = warehouse_id
     
-    def contains(self, products: dict[int]):
-        for product in products:
-            if self.products_info[product] < products[product]:
-                return False
+    def contains(self, products: dict[int] | list[int]):
+        
+        if products is dict: #dict[product_type] -> product_number
+            for product,number in products.items():
+                if self.products_info[product] < number:
+                    return False
+        
+        elif products is list: #dict[index] -> product_type
+            for product in products:
+                if self.products_info[product] < 1:
+                    return False
+        
         return True
     
     def remove_products(self, products: dict[int]):
