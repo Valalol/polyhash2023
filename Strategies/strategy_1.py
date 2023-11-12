@@ -104,24 +104,27 @@ def solve(challenge_data):
     
     
     # using drones
-    tick = 0
-    order_index = 0
+    
+    total_order_number: int = 0
+    for warehouse in warehouses_dict_new.values():
+        total_order_number += len(warehouse.products_info)
+    total_order_index: int = 0
+    
     warehouse0 = list(warehouses_dict_new.values())[0]
-    orders = warehouse.products_info
-    drone = Drone(warehouse0.coordinates, max_load, products_weight)
     drones_info = []
     for _ in range  (drone_count):
+        
         
         order_index = 0
         product_index = 0
         drone_state = 2
-        
-        drones_info.append(Drone(warehouse0.coordinates, max_load, products_weight), None)
-        drones_info[1] = [order_index, product_index]
+        drone = Drone(warehouse0.coordinates, max_load, products_weight)
+        drones_info.append(drone, [order_index, product_index])
         drone.state = drone_state
         drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)
     
-    while tick < deadline and order_index < len(orders):
+    tick = 0
+    while tick < deadline and total_order_index < total_order_number:
         
         for drone, warehouse in drones_info:
             tick += 1
@@ -130,10 +133,6 @@ def solve(challenge_data):
                     continue
             
             else:
-                
-                #checks that the order is not already complete
-                
-                #check that the maximum number or order from the warehouse is not already reached
                 
                 product_type = order.items[product_index]
                 
@@ -161,12 +160,13 @@ def solve(challenge_data):
                         
                         print(f"Order {order_index} completed at tick {tick}")
                         order_index += 1
+                        total_order_index += 1
                         product_index = 0
                         drone.state = 2
                         
-                        #check that the maximum number or order from the warehouse is not already reached
+                        #check that the maximum number or order from the warehouse is not reached
                         if order_index < len(warehouse.products_info):
-                            order = orders[order_index]
+                            order = warehouse.products_info[order_index]
                         else:
                             drone.warehouse, warehouses_dict_new = choosing_warehouse(warehouses_dict_new, drone, max_dist)
                             
