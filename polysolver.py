@@ -50,8 +50,10 @@ def score_solution(solution: str):
     Returns:
     - score (int): The score of the given solution.
     """
-    
     score = 0
+    
+    for line in solution.split("\n"):
+        pass
     
     return score
 
