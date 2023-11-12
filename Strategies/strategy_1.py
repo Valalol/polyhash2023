@@ -1,10 +1,10 @@
-from mathematiks import dist()
-from new_data_classes import *
+from mathematiks import dist
+from classes import *
 # calulating the worth of each command:
 max_dist = 1000
 
 # calculate the interest of a given order
-def interest_funct(order: Order, warehouses_dict: dict,
+def interest_funct(order: Order, warehouses_dict: dict, products_weight: list,
                    items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
                    items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
@@ -24,18 +24,21 @@ def interest_funct(order: Order, warehouses_dict: dict,
     for item in order.items:
         weight_value += products_weight[item]
     
-    items_number: int = len(order.items)
+    items_num: int = len(order.items)
     
     #calculate minimum distance of a warehouse who has the items & registers the warehouse
     min_distance_value: int = max_dist
     closest_warehouse: Warehouse = None
     
-    for warehouse in warehouse_dict.values():
+    for warehouse in warehouses_dict.values():
         as_items: bool = True
 
         #checks if the warehouse has the items
+        i: int = 0
         while i < len(order.items) and as_items is True:
-            if warehouse.products_info[item] = 0:
+            item = order.items[i]
+            i += 1
+            if warehouse.products_info[item]  == 0:
                 as_items = False
 
         #checks if the distance of the warehouse is less then the known closest's one
@@ -47,7 +50,7 @@ def interest_funct(order: Order, warehouses_dict: dict,
 
     #calculates the total interest of the order
     weight_interest: int = ( items_weight_coeff*weight_value**items_weight_pow )
-    number_interest: int = ( items_number_coeff*items_number**items_number_pow )
+    number_interest: int = ( items_num_coeff*items_num**items_num_pow )
     dist_interest: int = ( command_dist_coeff*min_distance_value**command_dist_pow )
     
     total_interest: int = weight_interest + number_interest + dist_interest
@@ -80,13 +83,13 @@ def solve(challenge_data):
         #checks if the items in the order is in the warehouse
         is_in_warehouse: bool = True
         while index < len(order.items) and is_in_warehouse is True:
-            if warehouse.products_info[order.items[index]] = 0:
+            if warehouse.products_info[order.items[index]] == 0:
                 is_in_warehouse = False
 
         #if the items are in the warehouse then it removes them from the warehouse and adds the order to the new warehouse_dict
         if is_in_warehouse :
             for item in order.items:
-                warehouse_dict_current_state[warehouse.coordinates].products_info[item] -= 1:
+                warehouse_dict_current_state[warehouse.coordinates].products_info[item] -= 1
             warehouses_dict_new(warehouse.coordinates).products_info.append(order)
         else:
             #does nothing for now
