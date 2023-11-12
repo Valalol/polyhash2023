@@ -3,65 +3,6 @@ from utils import find_nearest_warehouse
 from classes import *
 from strategies.strategy1 import *
 
-
-# calculate the interest of a given order
-def order_interest_funct(order: Order, warehouses_dict: dict, max_dist: int, products_weight: list,
-                   items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
-                   items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
-                   command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
-    
-    #calculate the weight of the order
-    weight_value: int = 0
-    #sums the weight of the items in the order
-    for item in order.items:
-        weight_value += products_weight[item]
-    
-    items_num: int = len(order.items)
-    
-    #calculate minimum distance of a warehouse who has the items & registers the warehouse
-    min_distance_value: int = max_dist
-    closest_warehouse: Warehouse = list(warehouses_dict.values())[0]
-    print(warehouses_dict)
-    for warehouse in warehouses_dict.values():
-        as_items: bool = True
-
-        #checks if the warehouse has the items
-        i: int = 0
-        while i < len(order.items) and as_items is True:
-            item = order.items[i]
-            i += 1
-            if warehouse.products_info[item]  == 0:
-                as_items = False
-
-        #checks if the distance of the warehouse is less then the known closest's one
-        if as_items is True :
-            distance_value: int = dist(warehouse.coordinates,order.coordinates)
-            if distance_value < min_distance_value:
-                closest_warehouse = warehouse
-                min_distance_value = distance_value
-
-    #calculates the total interest of the order
-    weight_interest: int = ( items_weight_coeff*weight_value**items_weight_pow )
-    number_interest: int = ( items_num_coeff*items_num**items_num_pow )
-    dist_interest: int = ( command_dist_coeff*min_distance_value**command_dist_pow )
-    
-    total_interest: int = weight_interest + number_interest + dist_interest
-    
-    return total_interest, closest_warehouse
-
-def interest_warehouse_funct(warehouse: Warehouse, drone: Drone, warehouse_orders: dict, max_dist: int,
-                             warehouse_dist_coeff: int | None = 1, warehouse_dist_pow: int | None = 1,
-                             warehouse_content_coeff: int | None = 1, warehouse_content_pow: int | None =1):
-    orders_value: int = 0
-    #sums the interest of the orders in the warehouse
-    for order in warehouse_orders[warehouse.coordinates]:
-        orders_value += order
-        
-
-
-
-
-
 def choosing_warehouse(warehouses_dict: dict, drone: Drone, max_dist: int):
     warehouse = find_nearest_warehouse(drone.coordinates, warehouses_dict, max_dist)
     warehouses_dict.pop(warehouse.coordinates)
@@ -77,7 +18,7 @@ def solve(challenge_data):
     
     for index,order in enumerate(orders_dict.values()):
         
-        interest, warehouse = order_interest_funct(order, warehouses_dict, max_dist,  products_weight)
+        interest, warehouse = order.calculate_interest(order, warehouses_dict, max_dist,  products_weight)
         order_interest_list.append([interest, order, warehouse])
     
     order_interest_list.sort(key=lambda x: x[0])
