@@ -8,7 +8,7 @@ def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tu
     for warehouse in warehouses_dict.values():
         
         distance: int = dist(coordinates, warehouse.coordinates)
-        if distance < min_dist:
+        if distance <= min_dist:
             min_dist = distance
             closest_warehouse = warehouse
             
