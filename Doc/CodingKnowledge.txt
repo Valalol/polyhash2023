@@ -1,0 +1,13 @@
+file to store knowledge over problems encountered and possible wweb references:
+
+inheritance of an init funct:
+
+    example:
+    class Num2(Num):
+        def __init__(self,num):
+            Num.__init__(self,num)
+            self.n2 = num * 2
+
+    reference:
+    https://stackoverflow.com/questions/5166473/inheritance-and-init-method-in-python
+
