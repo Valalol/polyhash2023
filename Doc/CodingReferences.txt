@@ -1,0 +1,11 @@
+Common variables:
+
+Product_type: int = ID/type or a product
+Product_number: int = Number of a said product
+Drone: Drone = drone taht moves products
+Warehouse: Warehouse = warehouse that stores products
+Order: Order = an order that requires products
+container: dict | list = datastorage
+
+Common functions:
+object.contains: checks if the object contains the content of a container
