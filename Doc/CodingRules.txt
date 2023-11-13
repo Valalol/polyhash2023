@@ -1,0 +1,27 @@
+#CodingRules.txt is a test at establishing a consensus on commentary formatting
+
+Each class/ function must have a commentary section formatted as follows:
+
+"""
+{description of the class} / {description of a function} 
+
+Attributes:
+    attribute1: attribute_type = {description of the atribute}
+    attribute2: ...
+
+Assertions:
+    {description of first asssertion}
+    ...
+
+"""
+
+{description of the class} should look like: the class represents ...
+{description of a function} shoud look like: require(self, arg1, ...) = the function does ...
+
+To note:
+description of a function should always be at the same place as the function for simplicity of modification.
+description of attributes should not include their type as it should be changeable and can already be found in the __init__ of a class or in the function args.
+
+Other:
+If you find yourself using a variable/variable_format many times whilst it's naming not being explicit please register it in CodingReferences.
+
