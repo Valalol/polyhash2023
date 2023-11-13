@@ -56,6 +56,10 @@ class Order:
         coordinates (tuple[int, int]): The coordinates for delivery.
         items (list[int]): The list of items in the order.
         order_id (int): The ID of the order.
+        
+    functions:
+        require(self, products: dict[int]) -> bool: Checks if the drone contains the requested items.
+        deliver(self, products: dict[int]) -> None: Removes the requested items from the drone
     """
     def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int = 0):
         self.items = items
@@ -75,8 +79,17 @@ class Order:
 
 
 class Drone:
+    """
+    Represents a drone.
+    
+    Attributes:
+        state: int = the state of the drone ( 0:move, 1:deliver, 2:load )
+        coordinates: (tuple[int, int]) = The coordinates of the drone.
+        item_dict: dict[coordinates]= Item = A dictionary of item Objects and their quantities.
+        
+    """
     def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: list[int], drone_id: int = 0):
-        self.state = None  # 0:move, 1:deliver, 2:load
+        self.state = None
         self.coordinates = coordinates
         self.item_dict = {}
         self.current_load = 0
@@ -94,8 +107,10 @@ class Drone:
             items (dict[int]): A dictionary of item IDs and their quantities to be loaded onto the drone.
             warehouse (Warehouse): The warehouse from which the items are to be loaded.
 
-        Raises:
-            AssertionError: If the drone is currently busy, the warehouse does not contain the requested items, or the drone is overloaded or underloaded.
+        Assertions:
+            The drone must no be busy
+            The warehouse msut contain the requested items
+            The drone must not be overloaded or underloaded.
         """
         assert not self.drone_busy(), (f"Drone {self.drone_id} is busy for {self.turns_left} more turns.")
         assert warehouse.contains(items), (f"Warehouse {warehouse.warehouse_id} does not contain {items}.")
