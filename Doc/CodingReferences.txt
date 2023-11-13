@@ -1,11 +1,37 @@
-Common variables:
+Constants:
+    *Base Level constants*
+    rows: int = number of rows in the grid
+    columns: int = number of columns in the grid
+    drone_count: int = number of drones for the level
+    deadline: int = number of maximum ticks for the level
+    max_load: int = maximum load for a drone
+    products_weight: list = refer #Common_datastorage
+    warehouses_dict: dict = refer #Common_datastorage
+    orders_dict: dict = refer #Common_datastorage
 
-Product_type: int = ID/type or a product
-Product_number: int = Number of a said product
-Drone: Drone = drone taht moves products
-Warehouse: Warehouse = warehouse that stores products
-Order: Order = an order that requires products
-container: dict | list = datastorage
+    *calculated Level Constants*
+    max_weight: int = weight of the heaviest product_type
+
+Variables:
+    *coding variables*
+    product_type: int = ID/type or a product
+    product_number: int = Number of a said product
+    drone: Drone = drone that moves products
+    warehouse: Warehouse = warehouse that stores products
+    order: Order = an order that requires products
+    container: dict | list = datastorage
+    coordinates: tuple[int, int] = coordinates of something
+    retour = a functions return value
+    list_type: int = refers to the formatting of a list
+    weight: int = weight of a product/products
+
+Common_datastorage:
+
+    warehouse_dict: dict[coordinates]: dictionary containing the warehouse's objects where dict[warehouse.coordinates] = Warehouse
+    order_dict: dict[coordinates]: dictionary containing the order's objects where dict[order.coordinates] = Order
+    products_weight: list[int] = list of the weights where list[product_type] = weight(product)
+    product_info: list[int] = gives the product information where list[product_type] = product_number
+
 
 Common functions:
 object.contains: checks if the object contains the content of a container
