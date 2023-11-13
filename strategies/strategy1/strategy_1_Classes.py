@@ -106,17 +106,7 @@ class IOrder(Order):
 
 
 class IDrone(Drone):
-    def __init__(self, drone_id: int,
-                 coordinates: tuple[int, int], max_load: int, item_weights: list[int]
-                 ):
-        self.drone_id = drone_id
-        self.state = None  # 0:move, 1:deliver, 2:load
-        self.coordinates = coordinates
-        self.item_dict = {}
-        self.current_load = 0
-        self.max_load = max_load
-        self.turns_left = 0
-        self.item_weights = item_weights
+    pass
     
     
         
