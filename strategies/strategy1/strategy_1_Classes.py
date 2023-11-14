@@ -3,44 +3,63 @@ from mathematiks import dist
 
 #max_weight is the maximum weight of an item + 1
 
+class Item():
+    
+    """
+    A class representing a product.
+    
+    Attributes:
+    - product_type (int): An integer representing the type of the product.
+    - product_weight (int): An integer representing the weight of the product.
+    - product_availability (int): An integer representing the availability of the product on the map.
+    """
+    
+    def __init__(self, product_type: int, product_weight: int):
+        self.product_type = product_type
+        self.product_weight = product_weight
+        self.product_availability: int = 0
+
 class IWarehouse(Warehouse):
+    
+    """
+    A class representing a warehouse that stores products.
+
+    Attributes:
+    - warehouse_interest: int: The interest of the warehouse.
+    - warehouse_id (int): An optional integer representing the ID of the warehouse.
+    - coordinates (tuple[int, int]): The coordinates of the warehouse.
+    - products_info (list[int]): A list of integers representing the quantity of each product stored in the warehouse.
+    - drones_on_use: list[int] = []: A list of the Drones Objects that are currently using the warehouse as a hive.
+    - complete_orders: list[Order]: A list of the Orders that are complete within the warehouse.
+    - max_weight (int): The maximum weight of an item + 1.
+    """
+        
     def __init__(self, warehouse_id: int,
                  coordinates: tuple[int, int], products_info: list[int],
                  max_weight: int, products_weight: list[int]
                  ):
-        """
-        A class representing a warehouse that stores products.
-
-        Attributes:
-        - warehouse_interest: int: The interest of the warehouse.
-        - warehouse_id (int): An optional integer representing the ID of the warehouse.
-        - coordinates (tuple[int, int]): The coordinates of the warehouse.
-        - products_info (list[int]): A list of integers representing the quantity of each product stored in the warehouse.
-        - drones_on_use: list[int] = []: A list of the Drones Objects that are currently using the warehouse as a hive.
-        - complete_orders: list[Order]: A list of the Orders that are complete within the warehouse.
-        """
+        Warehouse.__init__(self, coordinates, products_info, warehouse_id)
+        self.max_weight = max_weight
+        self.products_weight = products_weight
         self.warehouse_interest: int = 0
-        self.warehouse_id: int = warehouse_id
-        self.coordinates: tuple[int, int] = coordinates
-        self.products_info: list[int] = products_info
         self.drones_on_use: list[int] = []
         self.complete_orders: list[Order] = []
         
         self.calculate_interest(max_weight, products_weight)
     
-    #function used to calculate the interest of the warehouse from its products_info
     def calculate_interest(self,max_weight: int, products_weight: list[int]):
+        """the function calculates the interest of the warehouse from its products_info"""
         for product_type, product_number in self.products_info.items():
             self.warehouse_interest += (max_weight - products_weight[product_type]) * product_number
     
-    #Use of a setter is needed to update the interest of the warehouse whilst changing the products_info
     def remove_item(self, item: int, max_weight: int, products_weight: list[int]):
+        """the function removes an item from the warehouse and changes it's interest"""
         assert self.products_info[item] > 0
         self.products_info[item] -= 1
         self.interest -= (max_weight - products_weight[item])
     
-    #Use of a setter is needed to update the interest of the warehouse whilst changing the products_info
     def add_item(self, item: int, max_weight: int, products_weight: list[int]):
+        """the function adds an item to the warehouse and changes it's interest"""
         self.products_info[item] += 1
         self.interest += (max_weight - products_weight[item])
 
@@ -59,25 +78,24 @@ class IOrder(Order):
         - closest_order_warehouse: Warehouse | None: The closest warehouse that contains the order.
         - weight: int: The total weight of the order. 
         """
+        
+        Order.__init__(self, coordinates, items, order_id)
         self.order_interest: int | None = None
-        self.order_id: int = order_id
-        self.coordinates: tuple[int, int] = coordinates
-        self.items: list[int] = items
         self.closest_order_warehouse: Warehouse = None
         self.weight: int = 0
         
         self.update_weight(products_weight)
     
-    #function used to calculate the weight of the order from its items
     def update_weight(self, products_weight: list[int]):
+        """the function calculates the weight of the order from its items"""
         for item in self.items:
             self.weight += products_weight[item]
     
-    #calculates the total interest of the order from various variables
     def calculate_interest(self, warehouses_dict: dict, max_dist: int, products_weight: list, max_weight: int, 
                    items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
                    items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
+        """the function calculates the total interest of the order from various variables"""
         
         items_num: int = len(self.items)
         weight_value: int = self.items_num * max_weight - self.weight
@@ -104,10 +122,6 @@ class IOrder(Order):
         
         self.order_interest = total_interest
 
-
-class IDrone(Drone):
-    pass
-    
     
         
 
