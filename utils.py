@@ -35,13 +35,14 @@ def check_b_in_a(container1: list | dict, container2: list | dict, container2_li
             if container1[product_type] < product_number:
                 retour = False
     else:
-        if list_type == 1:
+        
+        if container2_list_type == 1:
             for product_type, product_number in enumerate(container2):
-                if container1[product] < 1:
+                if container1[product_type] < product_number:
                     retour = False
         else:
-            for product in container2:
-                if container1[product_type] < 1:
+            for product_type in container2:
+                if container1[product_type] < container2.count(product_type):
                     retour = False
     return retour
 
