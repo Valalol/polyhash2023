@@ -1,26 +1,47 @@
 #CodingRules.txt is a test at establishing a consensus on commentary formatting
 
-Each class/ function must have a commentary section formatted as follows:
+Each class must have a commentary section formatted as follows:
 
 """
-{description of the class} / {description of a function} 
+{description of the class}
 
 Attributes:
-    attribute1: attribute_type = {description of the atribute}
-    attribute2: ...
+    attribute1 = {description of the attribute}
+    ...
 
-Assertions:
-    {description of first asssertion}
+Raises:
+    {description of first Raise}
     ...
 
 """
 
 {description of the class} should look like: the class represents ...
-{description of a function} shoud look like: require(self, arg1, ...) = the function does ...
+
+Each function should have a commentary formatted as follows:
+
+"""
+{description of a function}
+
+Args:
+    Arg1: description of the first argument
+    ...
+
+Returns:
+    description of what it returns
+
+"""
+
+{description of a function} shoud look like: the function does ...
+
 
 To note:
-description of a function should always be at the same place as the function for simplicity of modification.
-description of attributes should not include their type as it should be changeable and can already be found in the __init__ of a class or in the function args.
+description of a function should always be at the same place as the function because: 
+Comments that aren’t near their describing code are frustrating to the reader and easily missed when updates are made.
+
+*description of attributes should not include their type because we use type hinting in the __init__ method.
+We assume the reader of the code has a basic understanding of programming principles and language syntax.*
+type can be used because of commands accessing the function's commmentary section whilst not accessing it's __init__ method
+
 
 Other:
 If you find yourself using a variable/variable_format many times whilst it's naming not being explicit please register it in CodingReferences.
