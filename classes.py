@@ -2,6 +2,7 @@ from __future__ import annotations
 from mathematiks import *
 from math import ceil
 from modified_data_classes import *
+from utils import check_b_in_a
 
 
 class Warehouse:
@@ -20,20 +21,25 @@ class Warehouse:
         self.warehouse_id = warehouse_id
     
     def contains(self, products: dict[int] | list[int]):
+        """
+        Ckecks if the warehouse contains the given products.
         
-        if products is dict: #dict[product_type] -> product_number
-            for product_type, product_number in products.items():
-                if self.products_info[product_type] <product_number:
-                    return False
         
-        elif products is list: #dict[index] -> product_type
-            for product_type in products:
-                if self.products_info[product_type] < 1:
-                    return False
+        """
         
-        return True
+        return check_b_in_a(self.products_info, products, 2)
     
     def remove_products(self, products: dict[int] | list[int]):
+        """
+        Removes products from the warehouse
+        
+        Args: 
+            products (dict[int]): products to remove
+        
+        Raises:
+            ValueError: If the warehouse does not contain at least one product.
+        
+        """
         
         if self.contains(products):
             
@@ -68,6 +74,13 @@ class Order:
     
     #functions that checks if the drones contains t
     def require(self, products: dict[int]):
+        """
+        checks if the drone contains the requested items.
+        
+        args:
+            products (dict[int]): A dictionary of product IDs and their quantities.
+        
+        """
         for product in products:
             if self.items.count(product) < products[product]:
                 return False
@@ -154,7 +167,9 @@ class Drone:
         Moves the drone to the specified coordinates.
 
         Args:
-            coordinates: A tuple of integers representing the destination coordinates.
+            coordinates (tuple): A tuple of integers representing the destination coordinates.
+        Raises:
+            AssertionError: If the drone is already busy.
         """
         assert not self.drone_busy(), (f"Drone {self.drone_id} is busy for {self.turns_left} more turns.")
         self.state = 0
@@ -178,15 +193,16 @@ class Drone:
 
 
     def drone_busy(self):
+        """checks if the drone is busy"""
         return self.turns_left > 0
 
 
     def tick(self):
+        """decrements the number of turns left before finishing whats he is doing"""
         if self.drone_busy():
             self.turns_left -= 1
         else:
             pass
-
 
 class Task:
     def __init__(self, end_coordinates: tuple[int, int], drone: Drone):
@@ -216,7 +232,6 @@ class MapSection:
         section_max_drones = 2
         interest = len(self.warehouse_list) * len(self.order_list) * (section_max_drones - self.drone_number)
         self.interest = interest
-
 
 if __name__ == '__main__':
     pass
