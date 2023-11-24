@@ -7,7 +7,7 @@
 from classes import *
 from polyparser import parse_challenge
 from polysolver import solve, score_solution, save_solution
-import visualizer
+#import visualizer
 import mesures_temps
 
 if __name__ == "__main__":
@@ -30,9 +30,9 @@ if __name__ == "__main__":
     challenge_data = parse_challenge(args.challenge)
     # challenge_data = (rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict)
 
-    visualizer.simple_summary(*challenge_data)
+    #visualizer.simple_summary(*challenge_data)
 
-    solution = solve(challenge_data, solve_strategy=0)
+    solution = solve(challenge_data, solve_strategy=3)
     print(solution)
 
     if args.output is not None:
