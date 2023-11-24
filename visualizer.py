@@ -1,9 +1,9 @@
-from PIL import Image
 import os
 import math
-import matplotlib.pyplot as plt
 
 def visualize_grid(size: tuple, warehouses_dict, orders_dict):
+    from PIL import Image
+    
     img = Image.new('RGB', size, color = 'white')
     pixels = img.load()
     
@@ -21,6 +21,7 @@ def visualize_grid(size: tuple, warehouses_dict, orders_dict):
 
 
 def heatmap(size: tuple, warehouses_dict, orders_dict):
+    from PIL import Image
     dot_size = 5
     grid = [[0 for i in range(size[1])] for j in range(size[0])]
     for warehouse_location in warehouses_dict.keys():
@@ -57,6 +58,8 @@ def heatmap(size: tuple, warehouses_dict, orders_dict):
 
 
 def coverage_map(size: tuple, warehouses_dict, orders_dict):
+    import matplotlib.pyplot as plt
+    
     radius = 40
     warehouses_x = [i[1] for i in warehouses_dict.keys()]
     warehouses_y = [i[0] for i in warehouses_dict.keys()]
