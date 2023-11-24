@@ -49,7 +49,7 @@ def solve(challenge_data):
                     print(f"Order {order_index} completed at tick {tick}")
                     order_index += 1
                 state = 0
-    
+        
     
     solution = solution[:-1]
     commands_amount = len(solution.split('\n'))
