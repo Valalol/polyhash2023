@@ -50,7 +50,7 @@ def solve(challenge_data):
                     order_index += 1
                     order = orders[order_index]
                 state = 0
-    
+        
     
     solution = solution[:-1]
     commands_amount = len(solution.split('\n'))
