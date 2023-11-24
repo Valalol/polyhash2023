@@ -86,7 +86,11 @@ class Order:
                 return False
         return True
     
+    
     def deliver(self, products: dict[int]):
+        """
+        substracts the items that have been delivered from the drone's inventory
+        """
         for product in products:
             self.items.pop(self.items.index(product))
 

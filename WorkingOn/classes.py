@@ -87,6 +87,9 @@ class Order:
         return True
     
     def deliver(self, products: dict[int]):
+        """
+        substracts the items that have been delivered from the drone's inventory
+        """
         for product in products:
             self.items.pop(self.items.index(product))
 
@@ -115,7 +118,10 @@ class Drone:
 
     def load(self, items: dict[int], warehouse: Warehouse):
         """
-        Loads items from a warehouse onto the drone.
+        This function is a facade meant to be used by the user.
+        It checks if it is possible to load the given items onto the drone from the warehouse.
+        Then it adds the times it takes to travel to the destination to the drone's turns_left attribute.
+        Finally it adds as much true_load as the number of different "items" in the items dictionary in the memory.
 
         Args:
             items (dict[int]): A dictionary of item IDs and their quantities to be loaded onto the drone.
@@ -139,15 +145,21 @@ class Drone:
             self.update_memory(["load",new_dict,warehouse])
 
     def true_load(self, items: dict[int], warehouse: Warehouse, new_items_total_weight: int):
-        
+        """
+        Loads one or more item of the same type from a warehouse.
+        """
         warehouse.remove_products(items)
         self.item_dict = dict_add(self.item_dict, items)
         self.current_load += new_items_total_weight
         self.turns_left += len(items)
+        
 
     def deliver(self, items: dict[int], order: Order):
         """
-        Delivers items to an order.
+        This function is a facade meant to be used by the user.
+        It checks if it is possible to deliver the given items from the drone to the order.
+        Then it adds the times it takes to travel to the destination to the drone's turns_left attribute.
+        Finally it adds as much true_deliver as the number of different items in the "items" dictionary in the memory.
 
         Args:
             items (dict[int, int]): A dictionary of item IDs and their quantities.
@@ -166,11 +178,12 @@ class Drone:
         #set into memory : true unload
         for item, number in items.items():
             new_dict = dict[item] = number
-            self.update_memory(["unload",new_dict,order])
+            self.update_memory(["deliver",new_dict,order])
 
-    def true_unload(self, items: dict[int], order: Order, removed_items_total_weight: int):
-        
-        
+    def true_deliver(self, items: dict[int], order: Order, removed_items_total_weight: int):
+        """
+        Delivers one or more item of the same type to an order.
+        """
         self.item_dict = dict_subtract(self.item_dict, items)
         order.deliver(items)
         self.current_load -= removed_items_total_weight
@@ -212,24 +225,25 @@ class Drone:
 
 
     def tick(self):
-        """decrements the number of turns left before finishing what he is doing"""
+        """
+        decrements the number of turns left before finishing what he is doing
+        checks and executes for the memory in case the drone is not busy
+        """
         if self.drone_busy():
             self.turns_left -= 1
-        else:
+        if not self.drone_busy() and len(self.memory_state) > 0 :
             self.exec_memory()
-            pass
-    
-    def update_memory(self,command: str):
-        self.memory.append
     
     def exec_memory(self):
-        
+        """
+        executes the oldest command stored in the memory.
+        """
         if len(self.memory) != 0:
-            command = self.memory.pop()
+            command = self.memory.pop(0)
             if command[0] == "load":
                 self.true_load(command[1:])
-            elif command[0] == "unload":
-                self.true_unload(command[1:])
+            elif command[0] == "deliver":
+                self.true_deliver(command[1:])
     
 class Task:
     def __init__(self, end_coordinates: tuple[int, int], drone: Drone):
