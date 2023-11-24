@@ -66,9 +66,12 @@ def save_solution(filename: str, solution: str):
     - filename (str): The name of the file to save the solution to.
     - solution (str): A text containing the solution to the challenge data.
     """
+
+    import os
     
-    with open(filename, "w") as file:
-        file.write(solution)
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "w+") as f:
+        f.write(solution)
     
     return None
 
