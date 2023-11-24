@@ -8,13 +8,14 @@ from classes import *
 import strategies.strategy_0 as strategy_0
 # import strategies.strategy1.strategy_1 as strategy_1
 import strategy_1 as strategy_1
+import strategies.strategy2.strategy_2_Classes as strategy_2
 from polyparser import parse_challenge
 import mesures_temps
 
 @mesures_temps.time_measurement
 def solve(challenge_data: list, solve_strategy: int = 1):
     """
-    Solves the given challenge data using the specified strategy.
+    Solves the given challenge data using the specified strategy2.
     
     Args:
     - challenge_data (list): A list containing the following challenge data:
@@ -27,7 +28,7 @@ def solve(challenge_data: list, solve_strategy: int = 1):
         - warehouses_dict (dict): A dictionary containing the warehouses information.
         - orders_dict (dict): A dictionary containing the orders information.
             - order_info (list): A list containing the order information. Wich are : list of items
-    - solve_strategy (int): An integer representing the strategy to use for solving the challenge data.
+    - solve_strategy (int): An integer representing the strategy2 to use for solving the challenge data.
     
     Returns:
     - solution (str): A text containing the solution to the challenge data.
@@ -38,6 +39,9 @@ def solve(challenge_data: list, solve_strategy: int = 1):
     
     elif solve_strategy == 1:
         solution = strategy_1.solve(challenge_data)
+
+    elif solve_strategy == 2:
+        solution = strategy_2.solve(challenge_data)
     
     return solution
 
