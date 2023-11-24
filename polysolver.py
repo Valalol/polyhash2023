@@ -5,11 +5,6 @@
 """
 
 from classes import *
-import strategies.strategy_0 as strategy_0
-import strategy_3
-# import strategies.strategy1.strategy_1 as strategy_1
-import strategy_1 as strategy_1
-import strategies.strategy2.strategy_2_Classes as strategy_2
 from polyparser import parse_challenge
 import mesures_temps
 
@@ -36,15 +31,19 @@ def solve(challenge_data: list, solve_strategy: int = 1):
     """
     
     if solve_strategy == 0:
+        import strategies.strategy_0 as strategy_0
         solution = strategy_0.solve(challenge_data)
     
     elif solve_strategy == 1:
+        import strategies.strategy_1 as strategy_1
         solution = strategy_1.solve(challenge_data)
 
     elif solve_strategy == 2:
+        # TODO: Implement strategy 2
         solution = strategy_2.solve(challenge_data)
     
     elif solve_strategy == 3:
+        import strategies.strategy_3 as strategy_3
         solution = strategy_3.solve(challenge_data)
     
     return solution
@@ -74,9 +73,12 @@ def save_solution(filename: str, solution: str):
     - filename (str): The name of the file to save the solution to.
     - solution (str): A text containing the solution to the challenge data.
     """
+
+    import os
     
-    with open(filename, "w") as file:
-        file.write(solution)
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "w+") as f:
+        f.write(solution)
     
     return None
 
