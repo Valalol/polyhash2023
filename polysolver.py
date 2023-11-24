@@ -6,11 +6,12 @@
 
 from classes import *
 import strategies.strategy_0 as strategy_0
-import strategies.strategy1.strategy_1 as strategy_1
+# import strategies.strategy1.strategy_1 as strategy_1
+import strategy_1 as strategy_1
 from polyparser import parse_challenge
-import mesures_temps
+#import mesures_temps
 
-@mesures_temps.time_measurement
+#@mesures_temps.time_measurement
 def solve(challenge_data: list, solve_strategy: int = 1):
     """
     Solves the given challenge data using the specified strategy.

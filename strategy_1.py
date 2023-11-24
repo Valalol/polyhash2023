@@ -1,35 +1,70 @@
-from mathematiks import dist
-from utils import find_nearest_warehouse
 from classes import *
-from strategies.strategy1 import *
+from mathematiks import dist
+from utils import *
+from strategies.strategy1.strategy_1_Classes import *
 
 def choosing_warehouse(warehouses_dict: dict, drone: Drone, max_dist: int):
     warehouse = find_nearest_warehouse(drone.coordinates, warehouses_dict, max_dist)
     warehouses_dict.pop(warehouse.coordinates)
     return warehouse, warehouses_dict
 
+def update_classes(challenge_data):
+    """
+    updates the strategy datas to use strategy 1 classes
+    
+    Args:
+        challenge data contains: rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict
+    
+    Returns:
+        new_challenge_data wich contains:
+        - level_info, new_warehouses_dict, new_orders_dict
+    """
+    level_info = LevelInfo(challenge_data)
+    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
+    
+    new_item_list = [None] * len(products_weight)
+    for item_id, weight in enumerate(products_weight):
+        new_item_list[item_id] = Item(item_id, weight)
+    
+    new_order_list = [None] * len(orders_dict.values())
+    for order_id, order in enumerate(orders_dict.values()):
+        new_order_item_list = []
+        for index, item_id in enumerate(order.items):
+            new_order_item_list.append( new_item_list[item_id] )
+        new_order_list[order_id] = IOrder(order_id, order.coordinates, new_order_item_list)
+    
+    new_warehouse_list = [None] * len(warehouses_dict.values())
+    for warehouse_id, warehouse in enumerate(warehouses_dict.values()):
+        new_warehouse_item_list = []
+        for item_id, item_number in enumerate(warehouse.products_info):
+            new_warehouse_item_list.append( [new_item_list[item_id], item_number] )
+        new_warehouse_list[warehouse_id] = IWarehouse(warehouse_id, warehouse.coordinates, new_warehouse_item_list, level_info.max_weight)
+    
+    return [level_info, new_warehouse_list, new_order_list]
+
 def solve(challenge_data):
     
-    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
-    max_dist = rows + columns
+    level_info, warehouse_list, order_list = update_classes(challenge_data)
 
     order_interest_list = [] #list[int, Order, Warehouse]
     #sort orders by interest:
     
-    for index,order in enumerate(orders_dict.values()):
+    #### erverything under this needs to be updated ####
+    
+    for index, order in enumerate(order_list):
         
-        interest, warehouse = order.calculate_interest(order, warehouses_dict, max_dist,  products_weight)
-        order_interest_list.append([interest, order, warehouse])
+        interest = order.calculate_interest(warehouse_list, level_info)
+        order_interest_list.append([interest, order])
     
     order_interest_list.sort(key=lambda x: x[0])
     
     #list[warehouse.id]->[order.ids]
     warehouse_orders= {}
-    for warehouse in warehouses_dict.values():
-        warehouse_orders[warehouse.coordinates] = []
+    for warehouse in warehouse_list:
+        warehouse_orders = [] * len(warehouse_list)
     
-    for order in order_interest_list:
-        c_interest, order, warehouse = tuple(order)
+    for order_info in order_interest_list:
+        order = tuple(order_info)
         
         #checks if the items in the order is in the warehouse
         is_in_warehouse: bool = True
@@ -40,12 +75,13 @@ def solve(challenge_data):
         #if the items are in the warehouse then it removes them from the warehouse and adds the order to the new warehouse_dict
         if is_in_warehouse :
             for item in order.items:
-                warehouses_dict[warehouse.coordinates].products_info[item] -= 1
-            warehouse_orders[warehouse.coordinates].append(order)
+                warehouse_list[warehouse.warehouse_id].products_info[item] -= 1
+            warehouse_orders[warehouse.warehouse_id].append(order)
         else:
             #does nothing for now
             pass
     
+    """ to finish patching updates"""
     
     # using drones
     

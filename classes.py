@@ -198,7 +198,7 @@ class Drone:
 
 
     def tick(self):
-        """decrements the number of turns left before finishing whats he is doing"""
+        """decrements the number of turns left before finishing what he is doing"""
         if self.drone_busy():
             self.turns_left -= 1
         else:

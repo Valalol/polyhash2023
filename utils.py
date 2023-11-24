@@ -1,3 +1,4 @@
+from __future__ import annotations
 from classes import *
 """
 variables:
@@ -30,7 +31,7 @@ def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tu
 
 def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1):
     retour: bool = True
-    if container2 is dict:
+    if type(container2) is dict:
         for product_type, product_number in container2.items():
             if container1[product_type] < product_number:
                 retour = False

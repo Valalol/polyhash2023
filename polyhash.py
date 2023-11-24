@@ -33,7 +33,7 @@ if __name__ == "__main__":
     visualizer.simple_summary(*challenge_data)
 
     solution = solve(challenge_data, solve_strategy=0)
-    #print(solution)
+    print(solution)
 
     if args.output is not None:
         # Sauvegarder le fichier généré

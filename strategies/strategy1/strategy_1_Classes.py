@@ -3,6 +3,22 @@ from mathematiks import dist
 
 #max_weight is the maximum weight of an item + 1
 
+class LevelInfo:
+    
+    def __init__(self,challenge_data) -> None:
+        rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
+        self.rows = rows
+        self.columns = columns
+        self.max_dist = rows + columns
+        self.drone_count = drone_count
+        self.deadline = deadline
+        self.max_load = max_load
+        self.products_weight = products_weight
+        self.max_weight = max(products_weight) + 1
+        self.warehouse_number = len(warehouses_dict.keys())
+        self.order_number = len(orders_dict.keys())
+        
+
 class Item():
     
     """
@@ -15,9 +31,9 @@ class Item():
     """
     
     def __init__(self, product_type: int, product_weight: int):
-        self.product_type = product_type
-        self.product_weight = product_weight
-        self.product_availability: int = 0
+        self.type = product_type
+        self.weight = product_weight
+        self.availability: int = 0
 
 class IWarehouse(Warehouse):
     
@@ -35,37 +51,52 @@ class IWarehouse(Warehouse):
     """
         
     def __init__(self, warehouse_id: int,
-                 coordinates: tuple[int, int], products_info: list[int],
-                 max_weight: int, products_weight: list[int]
+                 coordinates: tuple[int, int], products_info: list[tuple[Item, int]],
+                 max_weight: int
                  ):
         Warehouse.__init__(self, coordinates, products_info, warehouse_id)
-        self.max_weight = max_weight
-        self.products_weight = products_weight
-        self.warehouse_interest: int = 0
+        self.interest: int = 0
         self.drones_on_use: list[int] = []
         self.complete_orders: list[Order] = []
         
-        self.calculate_interest(max_weight, products_weight)
+        self.calculate_interest(max_weight)
     
-    def calculate_interest(self,max_weight: int, products_weight: list[int]):
+    def contains_products(self, products: list[int]):
+        """
+        Ckecks if the warehouse contains the given products.
+
+        Args:
+            products (list[int]): A list of integers representing the IDs of the products.
+        """
+        contain = True
+        for product in products:
+            if self.products_info[product] < products.count(product):
+                contain = False
+
+        return contain
+    
+    
+    def calculate_interest(self, max_weight: int):
         """the function calculates the interest of the warehouse from its products_info"""
-        for product_type, product_number in self.products_info.items():
-            self.warehouse_interest += (max_weight - products_weight[product_type]) * product_number
+        for product_info in self.products_info:
+            product_type, product_number = product_info
+            self.interest += (max_weight - product_type.weight) * product_number
     
-    def remove_item(self, item: int, max_weight: int, products_weight: list[int]):
+    def remove_item(self, item: int, max_weight: int, item_list: list[Item]):
         """the function removes an item from the warehouse and changes it's interest"""
+        product = item_list[item]
         assert self.products_info[item] > 0
         self.products_info[item] -= 1
-        self.interest -= (max_weight - products_weight[item])
+        self.interest -= (max_weight - product.weight)
     
-    def add_item(self, item: int, max_weight: int, products_weight: list[int]):
+    def add_item(self, item: int, max_weight: int, item_list: list[Item]):
         """the function adds an item to the warehouse and changes it's interest"""
+        product = item_list[item]
         self.products_info[item] += 1
-        self.interest += (max_weight - products_weight[item])
+        self.interest += (max_weight - product.weight)
 
 class IOrder(Order):
-    def __init__(self, order_id: int, products_weight: list[int],
-                 coordinates: tuple[int, int], items: list[int]
+    def __init__(self, order_id: int, coordinates: tuple[int, int], items: list[int]
                  ):
         """
         A class representing an order that stores products.
@@ -83,29 +114,29 @@ class IOrder(Order):
         self.order_interest: int | None = None
         self.closest_order_warehouse: Warehouse = None
         self.weight: int = 0
-        
-        self.update_weight(products_weight)
     
     def update_weight(self, products_weight: list[int]):
         """the function calculates the weight of the order from its items"""
         for item in self.items:
-            self.weight += products_weight[item]
+            self.weight += item.weight
+            
     
-    def calculate_interest(self, warehouses_dict: dict, max_dist: int, products_weight: list, max_weight: int, 
+    def calculate_interest(self, warehouses_list: list[IWarehouse], level_info: LevelInfo,
                    items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
                    items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
         """the function calculates the total interest of the order from various variables"""
         
         items_num: int = len(self.items)
-        weight_value: int = self.items_num * max_weight - self.weight
+        weight_value: int = items_num * level_info.max_weight - self.weight
         
         #finds the closest warehouse that contains the order and calculates the distance
-        min_distance_value: int = max_dist
-        closest_warehouse: Warehouse = list(warehouses_dict.values())[0]
-        for warehouse in warehouses_dict.values():
+        min_distance_value: int = level_info.max_dist
+        closest_warehouse: Warehouse = warehouses_list[0]
+        for warehouse in warehouses_list:
             
-            if warehouse.contains(self.items):
+            print(f'bug={[n.type for n in self.items]}')
+            if warehouse.contains([n.type for n in self.items]):
                 distance_value: int = dist(warehouse.coordinates, self.coordinates)
                 if distance_value < min_distance_value:
                     closest_warehouse = warehouse
@@ -122,6 +153,7 @@ class IOrder(Order):
         
         self.order_interest = total_interest
 
+        return self.interest
     
         
 
