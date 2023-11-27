@@ -33,7 +33,7 @@ def solve(challenge_data):
                 if drone[i].drone_busy():
                     continue
                 
-                print(f"Drone {i} has items : {drone[i].item_dict}, {tick}, drone busy for {drone[i].turns_left}")
+                #print(f"Drone {i} has items : {drone[i].item_dict}, {tick}, drone busy for {drone[i].turns_left}")
 
                 if drone[i].state == 0:
                     selected_warehouse = None
@@ -60,7 +60,7 @@ def solve(challenge_data):
                     product_index += 1
                     drone[i].state = 0
                 
-                print(f"Drone {i} has items : {drone[i].item_dict}, {tick}, drone busy for {drone[i].turns_left}")
+                #print(f"Drone {i} has items : {drone[i].item_dict}, {tick}, drone busy for {drone[i].turns_left}")
 
                 if len(drone[i].current_order.remaining_items) == 0:
                     print(f"All items of order {order_index} are atributed (tick : {tick})")
