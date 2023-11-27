@@ -68,7 +68,8 @@ class Order:
         deliver(self, products: dict[int]) -> None: Removes the requested items from the drone
     """
     def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int = 0):
-        self.items = items
+        self.items = items.copy()
+        self.remaining_items = items.copy()
         self.coordinates = coordinates
         self.order_id = order_id
     
@@ -102,7 +103,7 @@ class Drone:
         
     """
     def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: list[int], drone_id: int = 0):
-        self.state = None
+        self.state = 0
         self.coordinates = coordinates
         self.item_dict = {}
         self.current_load = 0
@@ -110,6 +111,7 @@ class Drone:
         self.turns_left = 0
         self.item_weights = item_weights
         self.drone_id = drone_id
+        self.current_order = None
 
 
     def load(self, items: dict[int], warehouse: Warehouse):
