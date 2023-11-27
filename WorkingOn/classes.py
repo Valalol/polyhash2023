@@ -43,11 +43,11 @@ class Warehouse:
         
         if self.contains(products):
             
-            if products is dict: #dict[product_type] -> product_number
+            if type(products) is dict: #dict[product_type] -> product_number
                 for product_type, product_number in products.items():
                     self.products_info[product_type] -= product_number
             
-            elif products is list: #dict[index] -> product_type
+            elif type(products) is list: #dict[index] -> product_type
                 for product_type in products:
                     self.products_info[product_type] -= product_number
                     
@@ -68,8 +68,7 @@ class Order:
         deliver(self, products: dict[int]) -> None: Removes the requested items from the drone
     """
     def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int = 0):
-        self.items = items.copy()
-        self.remaining_items = items.copy()
+        self.items = items
         self.coordinates = coordinates
         self.order_id = order_id
     
@@ -86,7 +85,6 @@ class Order:
             if self.items.count(product) < products[product]:
                 return False
         return True
-    
     
     def deliver(self, products: dict[int]):
         """
@@ -115,12 +113,15 @@ class Drone:
         self.turns_left = 0
         self.item_weights = item_weights
         self.drone_id = drone_id
-        self.current_order = None
+        self.memory_state = None
 
 
     def load(self, items: dict[int], warehouse: Warehouse):
         """
-        Loads items from a warehouse onto the drone.
+        This function is a facade meant to be used by the user.
+        It checks if it is possible to load the given items onto the drone from the warehouse.
+        Then it adds the times it takes to travel to the destination to the drone's turns_left attribute.
+        Finally it adds as much true_load as the number of different "items" in the items dictionary in the memory.
 
         Args:
             items (dict[int]): A dictionary of item IDs and their quantities to be loaded onto the drone.
@@ -138,15 +139,27 @@ class Drone:
         
         self.__travel(warehouse.coordinates)
         self.state = 2
+        #set into memory : true load
+        for item, number in items.items():
+            new_dict = dict[item] = number
+            self.update_memory(["load",new_dict,warehouse])
+
+    def true_load(self, items: dict[int], warehouse: Warehouse, new_items_total_weight: int):
+        """
+        Loads one or more item of the same type from a warehouse.
+        """
         warehouse.remove_products(items)
         self.item_dict = dict_add(self.item_dict, items)
         self.current_load += new_items_total_weight
         self.turns_left += len(items)
-
+        
 
     def deliver(self, items: dict[int], order: Order):
         """
-        Delivers items to an order.
+        This function is a facade meant to be used by the user.
+        It checks if it is possible to deliver the given items from the drone to the order.
+        Then it adds the times it takes to travel to the destination to the drone's turns_left attribute.
+        Finally it adds as much true_deliver as the number of different items in the "items" dictionary in the memory.
 
         Args:
             items (dict[int, int]): A dictionary of item IDs and their quantities.
@@ -162,11 +175,19 @@ class Drone:
         
         self.__travel(order.coordinates)
         self.state = 1
+        #set into memory : true unload
+        for item, number in items.items():
+            new_dict = dict[item] = number
+            self.update_memory(["deliver",new_dict,order])
+
+    def true_deliver(self, items: dict[int], order: Order, removed_items_total_weight: int):
+        """
+        Delivers one or more item of the same type to an order.
+        """
         self.item_dict = dict_subtract(self.item_dict, items)
         order.deliver(items)
         self.current_load -= removed_items_total_weight
         self.turns_left += len(items)
-
 
     def __travel(self, coordinates: tuple[int, int]):
         """
@@ -204,12 +225,26 @@ class Drone:
 
 
     def tick(self):
-        """decrements the number of turns left before finishing what he is doing"""
+        """
+        decrements the number of turns left before finishing what he is doing
+        checks and executes for the memory in case the drone is not busy
+        """
         if self.drone_busy():
             self.turns_left -= 1
-        else:
-            pass
-
+        if not self.drone_busy() and len(self.memory_state) > 0 :
+            self.exec_memory()
+    
+    def exec_memory(self):
+        """
+        executes the oldest command stored in the memory.
+        """
+        if len(self.memory) != 0:
+            command = self.memory.pop(0)
+            if command[0] == "load":
+                self.true_load(command[1:])
+            elif command[0] == "deliver":
+                self.true_deliver(command[1:])
+    
 class Task:
     def __init__(self, end_coordinates: tuple[int, int], drone: Drone):
         self.drone = drone

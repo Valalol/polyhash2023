@@ -14,8 +14,8 @@ def solve(challenge_data):
     solution = ""
 
     while tick < deadline and order_index < len(orders):
-        product_index = 0
         order = orders[order_index]
+        product_index = 0
         
         state = 0
         
@@ -48,9 +48,8 @@ def solve(challenge_data):
                 if len(order.items) == 0:
                     print(f"Order {order_index} completed at tick {tick}")
                     order_index += 1
-                    order = orders[order_index]
                 state = 0
-    
+        
     
     solution = solution[:-1]
     commands_amount = len(solution.split('\n'))
