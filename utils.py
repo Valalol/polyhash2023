@@ -29,6 +29,31 @@ def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tu
             
     return closest_warehouse
 
+def find_warehouse_containing_order(order: Order, warehouses_container: list[Warehouse] | dict[Warehouse], max_dist: int, Item_class = False) -> Warehouse | None:
+    
+    min_dist: int = max_dist
+    closest_warehouse: Warehouse | None = None
+    
+    if Item_class:
+        for warehouse in warehouses_container:
+            
+            distance: int = dist(order.coordinates, warehouse.coordinates)
+        
+            if distance <= min_dist and warehouse.contains(order.items):
+                min_dist = distance
+                closest_warehouse = warehouse
+        
+    else:
+        for warehouse in list(warehouses_container.values()):
+            
+            distance: int = dist(order.coordinates, warehouse.coordinates)
+        
+            if distance <= min_dist and warehouse.contains(order.items):
+                min_dist = distance
+                closest_warehouse = warehouse
+                
+    return closest_warehouse
+
 def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1):
     retour: bool = True
     if type(container2) is dict:

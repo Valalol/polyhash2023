@@ -105,7 +105,7 @@ class Drone:
         
     """
     def __init__(self, coordinates: tuple[int, int], max_load: int, item_weights: list[int], drone_id: int = 0):
-        self.state = None
+        self.state = 0
         self.coordinates = coordinates
         self.item_dict = {}
         self.current_load = 0

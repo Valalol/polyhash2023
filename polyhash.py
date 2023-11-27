@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     visualizer.simple_summary(*challenge_data)
 
-    solution = solve(challenge_data, solve_strategy=0)
+    solution = solve(challenge_data, solve_strategy=1)
     print(solution)
 
     if args.output is not None:

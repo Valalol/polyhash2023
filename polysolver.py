@@ -37,10 +37,11 @@ def solve(challenge_data: list, solve_strategy: int = 1):
     elif solve_strategy == 1:
         import strategies.strategy_1 as strategy_1
         solution = strategy_1.solve(challenge_data)
-
+    
     elif solve_strategy == 2:
         # TODO: Implement strategy 2
-        solution = strategy_2.solve(challenge_data)
+        # solution = strategy_2.solve(challenge_data)
+        pass
     
     elif solve_strategy == 3:
         import strategies.strategy_3 as strategy_3
