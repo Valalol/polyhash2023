@@ -34,23 +34,13 @@ def find_warehouse_containing_order(order: Order, warehouses_container: list[War
     min_dist: int = max_dist
     closest_warehouse: Warehouse | None = None
     
-    if Item_class:
-        for warehouse in warehouses_container:
-            
-            distance: int = dist(order.coordinates, warehouse.coordinates)
+    for warehouse in warehouses_container:
         
-            if distance <= min_dist and warehouse.contains(order.items):
-                min_dist = distance
-                closest_warehouse = warehouse
-        
-    else:
-        for warehouse in list(warehouses_container.values()):
-            
-            distance: int = dist(order.coordinates, warehouse.coordinates)
-        
-            if distance <= min_dist and warehouse.contains(order.items):
-                min_dist = distance
-                closest_warehouse = warehouse
+        distance: int = dist(order.coordinates, warehouse.coordinates)
+    
+        if distance <= min_dist and warehouse.contains(order.items):
+            min_dist = distance
+            closest_warehouse = warehouse
                 
     return closest_warehouse
 
