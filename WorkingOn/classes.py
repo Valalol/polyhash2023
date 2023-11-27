@@ -234,6 +234,9 @@ class Drone:
         if not self.drone_busy() and len(self.memory_state) > 0 :
             self.exec_memory()
     
+    def update_memory(self,command: str):
+        self.memory.append
+    
     def exec_memory(self):
         """
         executes the oldest command stored in the memory.
