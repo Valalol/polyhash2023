@@ -25,25 +25,29 @@ def parse_challenge(filename: str) -> object:
     index = 4
 
     warehouses_dict = {}
+    warehouses_list = []
     for i in range(warehouse_number):
         x, y = data[index]
         products_info = data[index + 1]
         index += 2
         warehouse = Warehouse(coordinates=(x, y), products_info=products_info, warehouse_id=i)
+        warehouses_list.append(warehouse)
         warehouses_dict[(x, y)] = warehouse
 
     order_number = data[index][0]
     index += 1
 
     orders_dict = {}
+    orders_list = []
     for i in range(order_number):
         x, y = data[index]
         order_info: list[int] = data[index + 2]
         index += 3
         order = Order(coordinates=(x, y), items=order_info, order_id=i)
+        orders_list.append(order)
         orders_dict[(x, y)] = order
 
-    return rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict
+    return rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list
 
 
 if __name__ == "__main__":
