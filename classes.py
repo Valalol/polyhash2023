@@ -43,11 +43,11 @@ class Warehouse:
         
         if self.contains(products):
             
-            if products is dict: #dict[product_type] -> product_number
+            if type(products) is dict: #dict[product_type] -> product_number
                 for product_type, product_number in products.items():
                     self.products_info[product_type] -= product_number
             
-            elif products is list: #list[index] -> product_type
+            elif type(products) is list: #list[index] -> product_type
                 for product_type in products:
                     self.products_info[product_type] -= product_number
                     
