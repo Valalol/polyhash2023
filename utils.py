@@ -45,26 +45,29 @@ def find_warehouse_containing_order(order: Order, warehouses_container: list[War
     return closest_warehouse
 
 def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1):
-    retour: bool = True
     if type(container2) is dict:
         for product_type, product_number in container2.items():
+            if type(container1) is dict:
+                if product_type not in container1:
+                    return False
+            
             if container1[product_type] < product_number:
-                retour = False
+                return False
     else:
         
         if container2_list_type == 1:
             for product_type, product_number in enumerate(container2):
                 if container1[product_type] < product_number:
-                    retour = False
+                    return False
         else:
             for product_type in container2:
                 if container1[product_type] < container2.count(product_type):
-                    retour = False
-    return retour
+                    return False
+    return True
 
 def calculate_weigth(container: list | dict, weight_list: list[int], list_type: int = 1,):
     retour : int = 0
-    if container is dict:
+    if type(container) is dict:
         for product_type, product_number in container.items():
             retour += weight_list[product_type] * product_number
     else:

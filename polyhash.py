@@ -14,7 +14,7 @@ if __name__ == "__main__":
     debug = True
 
     if debug:
-        args = type("Args", (object,), {"challenge": "challenges/b_busy_day.in", "output": "output/out.txt"})
+        args = type("Args", (object,), {"challenge": r"challenges\b_busy_day.in", "output": "output/out.txt"})
     else:
         import argparse
 
@@ -32,8 +32,8 @@ if __name__ == "__main__":
 
     visualizer.simple_summary(*challenge_data)
 
-    solution = solve(challenge_data, solve_strategy=3)
-    print(solution)
+    solution = solve(challenge_data, solve_strategy=0)
+    # print(solution)
 
     if args.output is not None:
         # Sauvegarder le fichier généré

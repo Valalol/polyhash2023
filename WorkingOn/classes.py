@@ -42,7 +42,6 @@ class Warehouse:
         """
         
         if self.contains(products):
-            
             if type(products) is dict: #dict[product_type] -> product_number
                 for product_type, product_number in products.items():
                     self.products_info[product_type] -= product_number
@@ -68,7 +67,8 @@ class Order:
         deliver(self, products: dict[int]) -> None: Removes the requested items from the drone
     """
     def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int = 0):
-        self.items = items
+        self.items = items.copy()
+        self.remaining_items = items.copy()
         self.coordinates = coordinates
         self.order_id = order_id
     
@@ -113,6 +113,7 @@ class Drone:
         self.turns_left = 0
         self.item_weights = item_weights
         self.drone_id = drone_id
+        self.current_order = None
         self.memory_state = None
 
 
@@ -170,6 +171,7 @@ class Drone:
         """
         assert not self.drone_busy(), (f"Drone {self.drone_id} is busy for {self.turns_left} more turns.")
         assert order.require(items), (f"Order {order.order_id} does not require {items}.")
+        assert check_b_in_a(self.item_dict, items), (f"Drone {self.drone_id} does not possess {items}.")
         removed_items_total_weight = items_total_weight(self.item_weights, items)
         assert 0 <= self.current_load - removed_items_total_weight <= self.max_load, (f"Drone {self.drone_id} is overloaded or underloaded.")
         

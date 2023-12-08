@@ -1,14 +1,14 @@
 from classes import *
 
 def solve(challenge_data):
-    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
+    rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list = challenge_data
 
     # Dumb brute force solution
     # starts with the first order and uses only one drone
 
     tick = -1
     order_index = 0
-    orders = list(orders_dict.values())
+    orders = orders_list
     drone: list = []
     for i in range (drone_count):
         drone.append(Drone(list(warehouses_dict.keys())[0], max_load, products_weight, i))
