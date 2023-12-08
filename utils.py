@@ -29,7 +29,7 @@ def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tu
             
     return closest_warehouse
 
-def find_warehouse_containing_order(order: Order, warehouses_container: list[Warehouse] | dict[Warehouse], max_dist: int, Item_class = False) -> Warehouse | None:
+def find_warehouse_containing_order(order: Order, warehouses_container: list[Warehouse] | dict[Warehouse], max_dist: int) -> Warehouse | None:
     
     min_dist: int = max_dist
     closest_warehouse: Warehouse | None = None
@@ -41,7 +41,7 @@ def find_warehouse_containing_order(order: Order, warehouses_container: list[War
         if distance <= min_dist and warehouse.contains(order.items):
             min_dist = distance
             closest_warehouse = warehouse
-                
+
     return closest_warehouse
 
 def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1):
@@ -75,3 +75,9 @@ def calculate_weigth(container: list | dict, weight_list: list[int], list_type: 
             for product_type, product_number in enumerate(container):
                 retour += weight_list[product_type] * product_number
     return retour
+
+if __name__ == '__main__':
+    if True:
+        test_dict = {1 : 1}
+        test_list = [1,0,1]
+        print(check_b_in_a(test_list,test_dict))

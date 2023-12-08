@@ -6,7 +6,7 @@ from mathematiks import dist
 class LevelInfo:
     
     def __init__(self,challenge_data) -> None:
-        rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict = challenge_data
+        rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list = challenge_data
         self.rows = rows
         self.columns = columns
         self.max_dist = rows + columns
@@ -15,8 +15,8 @@ class LevelInfo:
         self.max_load = max_load
         self.products_weight = products_weight
         self.max_weight = max(products_weight) + 1
-        self.warehouse_number = len(warehouses_dict.keys())
-        self.order_number = len(orders_dict.keys())
+        self.warehouse_number = len(warehouses_list)
+        self.order_number = len(orders_list)
         
 
 class Item():
@@ -58,6 +58,7 @@ class IWarehouse(Warehouse):
         self.complete_orders: list[Order] = []
         self.products_weight: list[int] = products_weight
         self.max_weight: int = max(products_weight)
+        self.warehouse: Warehouse | None = None
         self.calculate_interest()
     
     def contains_products(self, products: list[int]):
@@ -116,11 +117,10 @@ class IOrder(Order):
         """the function calculates the weight of the order from its items"""
         for item in self.items:
             self.weight += item.weight
-            
     
     def calculate_interest(self, warehouses_list: list[IWarehouse], level_info: LevelInfo,
                    items_weight_coeff: int | None = 1, items_weight_pow: int | None = 1,
-                   items_num_coeff: int | None = 1, items_num_pow: int | None = 1, 
+                   items_num_coeff: int | None = 1, items_num_pow: int | None = 1,
                    command_dist_coeff: int | None = 1, command_dist_pow: int | None = 1):
         """the function calculates the total interest of the order from various variables"""
         
@@ -133,6 +133,7 @@ class IOrder(Order):
         for warehouse in warehouses_list:
             
             if warehouse.contains(self.items):
+                
                 distance_value: int = dist(warehouse.coordinates, self.coordinates)
                 if distance_value < min_distance_value:
                     closest_warehouse = warehouse
@@ -151,5 +152,7 @@ class IOrder(Order):
 
         return self.order_interest
     
-        
+    def init_current_orders_status(self):
+        self.current_items = self.items.copy()
+        #print(len(self.current_items),len(self.items))
 

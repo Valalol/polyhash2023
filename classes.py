@@ -47,7 +47,7 @@ class Warehouse:
                 for product_type, product_number in products.items():
                     self.products_info[product_type] -= product_number
             
-            elif products is list: #dict[index] -> product_type
+            elif products is list: #list[index] -> product_type
                 for product_type in products:
                     self.products_info[product_type] -= product_number
                     
@@ -83,6 +83,7 @@ class Order:
         
         """
         for product in products:
+            #print(f'Product brought:{product} / Product in order: {self.items}')
             if self.items.count(product) < products[product]:
                 return False
         return True
@@ -157,6 +158,7 @@ class Drone:
         """
         assert not self.drone_busy(), (f"Drone {self.drone_id} is busy for {self.turns_left} more turns.")
         assert order.require(items), (f"Order {order.order_id} does not require {items}.")
+        assert check_b_in_a(self.item_dict, items), (f"Drone {self.drone_id} does not possess {items}.")
         removed_items_total_weight = items_total_weight(self.item_weights, items)
         assert 0 <= self.current_load - removed_items_total_weight <= self.max_load, (f"Drone {self.drone_id} is overloaded or underloaded.")
         
