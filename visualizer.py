@@ -94,12 +94,12 @@ def coverage_map(size: tuple, warehouses_dict, orders_dict):
 
 
 
-def simple_summary(rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict):
+def simple_summary(rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list):
     text = f"The grid is {rows} rows by {columns} columns. ({rows*columns} cells)\n"
     text += f"There are {drone_count} drones available each with a maximum load of {max_load}.\n"
     text += f"The deadline is {deadline} turns.\n"
     text += f"There are {len(products_weight)} different product types.\n"
     text += f"Their weights ranges from {min(products_weight)} to {max(products_weight)} with an average of {round(sum(products_weight)/len(products_weight), 2)}.\n"
-    text += f"There are {len(warehouses_dict)} warehouses.\n"
-    text += f"There are {len(orders_dict)} orders with an average of {round(sum([len(order.items) for order in orders_dict.values()])/len(orders_dict), 2)} items per order.\n"
+    text += f"There are {len(warehouses_list)} warehouses.\n"
+    text += f"There are {len(orders_list)} orders with an average of {round(sum([len(order.items) for order in orders_list])/len(orders_list), 2)} items per order.\n"
     print(text)
