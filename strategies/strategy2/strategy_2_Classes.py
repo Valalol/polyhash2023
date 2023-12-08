@@ -50,16 +50,15 @@ class IWarehouse(Warehouse):
     - max_weight (int): The maximum weight of an item + 1.
     """
 
-    def __init__(self, warehouse_id: int,
-                 coordinates: tuple[int, int], products_info: list[tuple[Item, int]],
-                 max_weight: int
+    def __init__(self, warehouse: Warehouse, products_weight: list[int]
                  ):
-        Warehouse.__init__(self, coordinates, products_info, warehouse_id)
+        Warehouse.__init__(self, warehouse.coordinates, warehouse.products_info, warehouse.warehouse_id)
         self.interest: int = 0
         self.drones_on_use: list[int] = []
         self.complete_orders: list[Order] = []
-
-        self.calculate_interest(max_weight)
+        self.products_weight: list[int] = products_weight
+        self.max_weight: int = max(products_weight)
+        self.calculate_interest()
 
     def contains_products(self, products: list[int]):
         """
@@ -75,19 +74,11 @@ class IWarehouse(Warehouse):
 
         return contain
 
-    def calculate_interest(self, max_weight: int):
-        """Calculate the interest of the warehouse from its products_info."""
-        # Trier les produits par distance (en ordre croissant) et poids (en ordre croissant)
-        sorted_products = sorted(self.products_info, key=lambda x: (x[0].distance, x[0].weight))
+    def calculate_interest(self):
+        """the function calculates the interest of the warehouse from its products_info"""
+        for product_type, product_number in enumerate(self.products_info):
+            self.interest += (self.max_weight - self.products_weight[product_type]) * product_number
 
-        for i, product_info in enumerate(sorted_products):
-            product_type, product_number = product_info
-            distance_contribution = 1 / (product_type.distance + 1)  # Fonction décroissante de la distance
-            weight_contribution = max(0, max_weight - product_type.weight)
-
-            priority_multiplier = 1 / (i + 1)  # Priorité décroissante avec l'index dans la liste triée
-
-            self.interest += (distance_contribution + weight_contribution) * product_number * priority_multiplier
     def remove_item(self, item: int, max_weight: int, item_list: list[Item]):
         """the function removes an item from the warehouse and changes it's interest"""
         product = item_list[item]
@@ -103,8 +94,7 @@ class IWarehouse(Warehouse):
 
 
 class IOrder(Order):
-    def __init__(self, order_id: int, coordinates: tuple[int, int], items: list[int]
-                 ):
+    def __init__(self, order: Order):
         """
         A class representing an order that stores products.
 
@@ -117,7 +107,7 @@ class IOrder(Order):
         - weight: int: The total weight of the order.
         """
 
-        Order.__init__(self, coordinates, items, order_id)
+        Order.__init__(self, order.coordinates, order.items, order.order_id)
         self.order_interest: int | None = None
         self.closest_order_warehouse: Warehouse = None
         self.weight: int = 0
@@ -141,8 +131,7 @@ class IOrder(Order):
         closest_warehouse: Warehouse = warehouses_list[0]
         for warehouse in warehouses_list:
 
-            print(f'bug={[n.type for n in self.items]}')
-            if warehouse.contains([n.type for n in self.items]):
+            if warehouse.contains(self.items):
                 distance_value: int = dist(warehouse.coordinates, self.coordinates)
                 if distance_value < min_distance_value:
                     closest_warehouse = warehouse
@@ -159,7 +148,6 @@ class IOrder(Order):
 
         self.order_interest = total_interest
 
-        return self.interest
-
+        return self.order_interest
 
 
