@@ -37,14 +37,14 @@ def solve(challenge_data):
 
                 if drone[i].state == 0:
                     selected_warehouse = None
-                    for warehouse in warehouses_dict.values():
+                    for warehouse in warehouse_list:
                         if warehouse.products_info[product_type] > 0:
                             selected_warehouse = warehouse
                             break
                     drone[i].load({product_type: 1}, selected_warehouse)
                     drone[i].current_order = order
                     order.remaining_items.pop(0)
-                    print(f"Started loading product {product_type} from warehouse {selected_warehouse.warehouse_id} at tick {tick}")
+                    print(f"Started loading product {product_type} from warehouse {selected_warehouse.warehouse_id} at tick {tick} by drone {i}")
                     solution += f"{i} L {selected_warehouse.warehouse_id} {product_type} 1\n"
                     drone[i].state = 1
 
@@ -55,8 +55,8 @@ def solve(challenge_data):
                             delivered_item = item_stocked
                             break
                     drone[i].deliver({delivered_item: 1}, drone[i].current_order)
-                    print(f"Started delivering product {product_type} for order {order_index} at tick {tick}")
-                    solution += f"{i} D {order_index} {product_type} 1\n"
+                    print(f"Started delivering product {delivered_item} for order {drone[i].current_order.order_id} at tick {tick} by drone {i}")
+                    solution += f"{i} D {drone[i].current_order.order_id} {delivered_item} 1\n"
                     product_index += 1
                     drone[i].state = 0
                 

@@ -41,6 +41,7 @@ class Warehouse:
         """
         
         if self.contains(products):
+            
             if type(products) is dict: #dict[product_type] -> product_number
                 for product_type, product_number in products.items():
                     self.products_info[product_type] -= product_number
