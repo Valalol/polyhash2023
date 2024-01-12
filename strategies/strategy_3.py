@@ -38,7 +38,7 @@ def solve(challenge_data):
                 if drone[i].state == 0:
                     selected_warehouse = None
                     for warehouse in warehouses_list:
-                        if warehouse.products_info[product_type] > 0:
+                        if warehouse.predicted_products_info[product_type] > 0:
                             selected_warehouse = warehouse
                             break
                     drone[i].load({product_type: 1}, selected_warehouse)
@@ -68,7 +68,11 @@ def solve(challenge_data):
                     if order_index >= len(orders):
                         break
                     order = orders[order_index]
-                
+    
+    while tick < deadline:
+        tick += 1
+        for i in range (drone_count):
+            drone[i].tick()
 
     
     
