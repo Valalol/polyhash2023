@@ -144,7 +144,7 @@ class Drone:
         for item, number in items.items():
             new_dict = {}
             new_dict[item] = number
-            self.update_memory(["load",new_dict,warehouse])
+            self.update_memory(["load",new_dict,warehouse,new_items_total_weight])
 
     def true_load(self, items: dict[int], warehouse: Warehouse, new_items_total_weight: int):
         """
@@ -154,7 +154,7 @@ class Drone:
         self.item_dict = dict_add(self.item_dict, items)
         self.current_load += new_items_total_weight
         self.turns_left += len(items)
-        
+
 
     def deliver(self, items: dict[int], order: Order):
         """
@@ -179,9 +179,10 @@ class Drone:
         self.__travel(order.coordinates)
         self.state = 1
         #set into memory : true unload
+        new_dict = {}
         for item, number in items.items():
-            new_dict = dict[item] = number
-            self.update_memory(["deliver",new_dict,order])
+            new_dict[item] = number
+            self.update_memory(["deliver", new_dict,order, removed_items_total_weight])
 
     def true_deliver(self, items: dict[int], order: Order, removed_items_total_weight: int):
         """
@@ -237,8 +238,8 @@ class Drone:
         if not self.drone_busy() and len(self.memory) > 0 :
             self.exec_memory()
     
-    def update_memory(self,command: str):
-        self.memory.append
+    def update_memory(self, command: list):
+        self.memory.append(command)
     
     def exec_memory(self):
         """
@@ -247,10 +248,10 @@ class Drone:
         if len(self.memory) != 0:
             command = self.memory.pop(0)
             if command[0] == "load":
-                self.true_load(command[1:])
+                self.true_load(*command[1:])
             elif command[0] == "deliver":
-                self.true_deliver(command[1:])
-    
+                self.true_deliver(*command[1:])
+
 class Task:
     def __init__(self, end_coordinates: tuple[int, int], drone: Drone):
         self.drone = drone

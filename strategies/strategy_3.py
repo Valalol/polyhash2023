@@ -37,7 +37,7 @@ def solve(challenge_data):
 
                 if drone[i].state == 0:
                     selected_warehouse = None
-                    for warehouse in warehouse_list:
+                    for warehouse in warehouses_list:
                         if warehouse.products_info[product_type] > 0:
                             selected_warehouse = warehouse
                             break
