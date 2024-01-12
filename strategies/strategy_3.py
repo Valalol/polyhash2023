@@ -4,7 +4,7 @@ def solve(challenge_data):
     rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list = challenge_data
 
     # Dumb brute force solution
-    # starts with the first order and uses only one drone
+    # starts with the first order but uses all the drone
 
     tick = -1
     order_index = 0
@@ -37,7 +37,8 @@ def solve(challenge_data):
 
                 if drone[i].state == 0:
                     selected_warehouse = None
-                    for warehouse in warehouses_list:
+                    warehouses_ordered_list = sorted(warehouses_list, key=lambda warehouse: dist(warehouse.coordinates, drone[i].coordinates))
+                    for warehouse in warehouses_ordered_list:
                         if warehouse.predicted_products_info[product_type] > 0:
                             selected_warehouse = warehouse
                             break
