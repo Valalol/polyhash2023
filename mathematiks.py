@@ -12,17 +12,3 @@ def items_total_weight(item_weights: list[int], items_list: dict[int]):
         quantity = items_list[item]
         somme += item_weights[item] * quantity
     return somme
-
-
-
-
-
-def zones_chaudes():
-    tableau_warehouse = []
-    tableau_commande = []
-
-    for i in range(len(warehouse_list)):
-        tableau_warehouse.append(warehouse_list[i])
-    for i in range(len(order_list)):
-        tableau_warehouse.append(order_list[i])
-    return

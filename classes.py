@@ -142,24 +142,24 @@ class Drone:
         assert not self.drone_busy(), (f"Drone {self.drone_id} is busy for {self.turns_left} more turns.")
         assert warehouse.contains(items), (f"Warehouse {warehouse.warehouse_id} does not contain {items}.")
         new_items_total_weight = items_total_weight(self.item_weights, items)
-        assert 0 <= self.current_load + new_items_total_weight <= self.max_load, (f"Drone {self.drone_id} is overloaded or underloaded.")
+        predictive_load = self.current_load + new_items_total_weight
+        assert 0 <= predictive_load <= self.max_load, (f"Drone {self.drone_id} is overloaded or underloaded. (Predictive load: {predictive_load}, Max load: {self.max_load})")
         
         self.__travel(warehouse.coordinates)
         self.state = 2
         warehouse.remove_products(items, real=False)
         #set into memory : true load
         for item, number in items.items():
-            new_dict = {}
-            new_dict[item] = number
-            self.update_memory(["load",new_dict,warehouse,new_items_total_weight])
+            new_dict = {item: number}
+            self.update_memory(["load",new_dict,warehouse])
 
-    def true_load(self, items: dict[int], warehouse: Warehouse, new_items_total_weight: int):
+    def true_load(self, items: dict[int], warehouse: Warehouse):
         """
         Loads one or more item of the same type from a warehouse.
         """
         warehouse.remove_products(items, real=True)
         self.item_dict = dict_add(self.item_dict, items)
-        self.current_load += new_items_total_weight
+        self.current_load += items_total_weight(self.item_weights, items)
         self.turns_left += len(items)
 
 
@@ -181,7 +181,8 @@ class Drone:
         assert order.require(items), (f"Order {order.order_id} does not require {items}.")
         assert check_b_in_a(self.item_dict, items), (f"Drone {self.drone_id} does not possess {items}.")
         removed_items_total_weight = items_total_weight(self.item_weights, items)
-        assert 0 <= self.current_load - removed_items_total_weight <= self.max_load, (f"Drone {self.drone_id} is overloaded or underloaded.")
+        predictive_load = self.current_load - removed_items_total_weight
+        assert 0 <= predictive_load <= self.max_load, (f"Drone {self.drone_id} is overloaded or underloaded. (Predictive load: {predictive_load}, Max load: {self.max_load})")
         
         self.__travel(order.coordinates)
         self.state = 1
@@ -189,15 +190,15 @@ class Drone:
         new_dict = {}
         for item, number in items.items():
             new_dict[item] = number
-            self.update_memory(["deliver", new_dict,order, removed_items_total_weight])
+            self.update_memory(["deliver", new_dict,order])
 
-    def true_deliver(self, items: dict[int], order: Order, removed_items_total_weight: int):
+    def true_deliver(self, items: dict[int], order: Order):
         """
         Delivers one or more item of the same type to an order.
         """
         self.item_dict = dict_subtract(self.item_dict, items)
         order.deliver(items)
-        self.current_load -= removed_items_total_weight
+        self.current_load -= items_total_weight(self.item_weights, items)
         self.turns_left += len(items)
 
     def __travel(self, coordinates: tuple[int, int]):

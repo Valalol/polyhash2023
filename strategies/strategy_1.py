@@ -149,7 +149,7 @@ def solve(challenge_data):
                     nombre_items = 0
                     while overall_state and nombre_items == 0:
                         warehouse = drone.warehouse
-                        print(warehouse.warehouse_id)
+                        # print(warehouse.warehouse_id)
                         warehouse_orders = warehouses_orders[warehouse.warehouse_id]
                         if len(warehouse_orders) != 0:
                             order = warehouse_orders[0]
@@ -187,18 +187,31 @@ def solve(challenge_data):
                             
                             if overall_state:
                                 #print(order.current_items,order.order_id)
-                                product_type = order.current_items[0]
+                                products = {}
+                                item_index = 0
+                                product = order.current_items[item_index]
+                                print(f"Trying to load order {order.order_id}")
+                                while calculate_weigth(products, products_weight) + products_weight[product] < level_info.max_load and item_index <= len(order.current_items) - 1:
+                                    if product in products:
+                                        products[product] += 1
+                                    else:
+                                        products[product] = 1
+                                    
+                                    item_index += 1
+                                    if item_index <= len(order.current_items) - 1:
+                                        product = order.current_items[item_index]
 
-                    if drone.current_load + products_weight[product_type] < level_info.max_load :
+                    if drone.current_load + calculate_weigth(products, products_weight) < level_info.max_load :
                         if len(order.current_items) != 0:
                             #print(f'order: {order.order_id} contains: {order.current_items}')
-                            print(f"Drone {drone.drone_id} Started loading product {product_type} from warehouse {warehouse.warehouse_id} at tick {tick} for order {order.order_id}")
                             #print(len(order.current_items))
-                            drone.load({product_type: 1},warehouse)
+                            drone.load(products, warehouse)
                             drone.state = 0
-                            solution += f"{drone.drone_id} L {warehouse.warehouse_id} {product_type} 1\n"
-                            memory.append([order, product_type])
-                            order.current_items.remove(product_type)
+                            for product_type in products:
+                                print(f"Drone {drone.drone_id} Started loading product {product_type} from warehouse {warehouse.warehouse_id} at tick {tick} for order {order.order_id}")
+                                solution += f"{drone.drone_id} L {warehouse.warehouse_id} {product_type} 1\n"
+                                order.current_items.remove(product_type)
+                                memory.append([order, product_type])
                             if len(order.current_items) == 0 and len(warehouse_orders) != 0:
                                 warehouse_orders.remove(order)
                                 if len(warehouse_orders) == 0:
