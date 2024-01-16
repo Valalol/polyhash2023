@@ -52,20 +52,18 @@ def solve(challenge_data):
     order_interest_list = [] #list[int, Order, Warehouse]
     #sort orders by interest:
     
-    for index, order in enumerate(orders_list):
-        
-        interest = order.calculate_interest(warehouses_list, level_info)
-        order_interest_list.append([interest, order])
+    for order in orders_list:
+        order.calculate_interest(warehouses_list, level_info)
+        order_interest_list.append(order)
     
-    order_interest_list.sort(key=lambda x: x[0])
+    order_interest_list.sort(key=lambda x: x.order_interest)
     
     #list[warehouse.id]->[warehouse_orders]
     warehouses_orders = [None] * len(warehouses_list)
     
     #trie quelles order sont dans quel warehouse
     
-    for order_info in order_interest_list:
-        order = order_info[1]
+    for order in order_interest_list:
         
         warehouse = find_warehouse_containing_order(order, warehouses_list, level_info.max_dist)
         if warehouse != None:
@@ -111,14 +109,11 @@ def solve(challenge_data):
     #it also creates a memory to store actions to be executed later on
     
     warehouse0 = warehouses_list[0]
-    drones_list= []
+    drones_list = []
     drones_memory = []
     
-    for i in range  (drone_count):
-        
-        drone_state = 2
+    for i in range(drone_count):
         drone = Drone(warehouse0.coordinates, level_info.max_load, level_info.products_weight, i)
-        drone.state = drone_state
         drone.warehouse = choosing_warehouse(warehouses_list, warehouses_orders, warehouse_interest)
         drones_list.append(drone)
         drones_memory.append([])
@@ -128,11 +123,12 @@ def solve(challenge_data):
     #après chaque commande complète le drone cherche le warehous le plus interessant
     solution = ''
     
-    if False:
-        order = orders_list[913]
-        print(f' does order {order.order_id} require {163}: {order.require({163:1})}')
-        print(order.items)
-        print(f'warehouse 3 contains object 162:{warehouses_list[2].contains({162: 1})}')
+    
+    # debug
+    # order = orders_list[913]
+    # print(f' does order {order.order_id} require {163}: {order.require({163:1})}')
+    # print(order.items)
+    # print(f'warehouse 3 contains object 162:{warehouses_list[2].contains({162: 1})}')
     
     overall_state = True
     tick = 0
@@ -231,6 +227,7 @@ def solve(challenge_data):
                     else:
                         drone.state = 0
     
+    solution = solution[:-1]
     commands_amount = len(solution.split('\n'))
     solution = f"{commands_amount}\n{solution}"
     return solution

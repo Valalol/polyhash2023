@@ -146,7 +146,7 @@ class IOrder(Order):
         number_interest: int = ( items_num_coeff*items_num**items_num_pow )
         dist_interest: int = ( command_dist_coeff*min_distance_value**command_dist_pow )
         
-        total_interest: int = weight_interest + number_interest + dist_interest
+        total_interest: int = weight_interest - number_interest - dist_interest
         
         self.order_interest = total_interest
 
