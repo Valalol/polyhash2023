@@ -78,7 +78,10 @@ def solve(challenge_data):
                     warehouses_orders[warehouse.warehouse_id].append(order)
     
     for warehouse_id,warehouse_orders in enumerate(warehouses_orders):
+        test_order_id = 1124
         print(f'warehouse {warehouse_id} contains {[n.order_id for n in warehouse_orders]}')
+        if test_order_id in [n.order_id for n in warehouse_orders]:
+            print(f'warehouse possesses {test_order_id}')
     
     #rajoute les items enlevé just avant
     for warehouse_id,warehouse_order in enumerate(warehouses_orders):
@@ -125,7 +128,6 @@ def solve(challenge_data):
     #après chaque commande complète le drone cherche le warehous le plus interessant
     solution = ''
     
-    
     if False:
         order = orders_list[913]
         print(f' does order {order.order_id} require {163}: {order.require({163:1})}')
@@ -143,6 +145,7 @@ def solve(challenge_data):
             state = drone.state
             memory = drones_memory[drone.drone_id]         
             drone.tick()
+            #order.current_items is shared when it should not
             if drone.drone_busy():
                     continue
             else:
@@ -150,30 +153,45 @@ def solve(challenge_data):
                     nombre_items = 0
                     while overall_state and nombre_items == 0:
                         warehouse = drone.warehouse
+                        print(warehouse.warehouse_id)
                         warehouse_orders = warehouses_orders[warehouse.warehouse_id]
-                        if len(order.current_items) == 0:
-                            if len(warehouses_orders[warehouse.warehouse_id]) == 0:
-                                warehouse = choosing_warehouse(warehouses_list, warehouses_orders, warehouse_interest)
+                        if len(warehouse_orders) != 0:
+                            order = warehouse_orders[0]
+                        else:
+                            warehouse = choosing_warehouse(warehouses_list, warehouses_orders, warehouse_interest)
+                            if warehouse is not None:
                                 warehouse_orders = warehouses_orders[warehouse.warehouse_id]
                                 drone.warehouse = warehouse
-                                print(f'Drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id} with {len(warehouses_orders[warehouse.warehouse_id])} orders')
-                                if len(warehouse_orders) == 0:
-                                    overall_state = False
+                                print(f'Drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id} with {len(warehouses_orders[warehouse.warehouse_id])} orders, n°1')
+                                #print(f'list: {warehouses_orders[warehouse.warehouse_id].pop().current_items}')
+                                order = warehouse_orders[0]
                             else:
-                                warehouse_orders.pop(0)
+                                overall_state = False
                         
-                        warehouse_orders = warehouses_orders[warehouse.warehouse_id]
-                        if type(warehouse_orders) == IOrder:
-                            warehouse_orders = [warehouse_orders]
+                        if overall_state:
                         
-                        if overall_state and len(warehouse_orders) != 0 :
-                            order = warehouse_orders[0]
+                            if len(order.current_items) == 0:
+                                if len(warehouses_orders[warehouse.warehouse_id]) == 0:
+                                    warehouse = choosing_warehouse(warehouses_list, warehouses_orders, warehouse_interest)
+                                    warehouse_orders = warehouses_orders[warehouse.warehouse_id]
+                                    drone.warehouse = warehouse
+                                    print(f'Drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id} with {len(warehouses_orders[warehouse.warehouse_id])} orders n°2')
+                                    if len(warehouse_orders) == 0:
+                                        overall_state = False
+                                else:
+                                    warehouse_orders.pop(0)
+                            
+                            warehouse_orders = warehouses_orders[warehouse.warehouse_id]
+                            if type(warehouse_orders) == IOrder:
+                                warehouse_orders = [warehouse_orders]
+                            
+                            if overall_state and len(warehouse_orders) != 0 :
+                                order = warehouse_orders[0]
                             nombre_items = len(order.current_items)
-                        else:
-                            warehouses_orders.pop(0)
-                    
-                    if overall_state:
-                        product_type = order.current_items[0]
+                            
+                            if overall_state:
+                                #print(order.current_items,order.order_id)
+                                product_type = order.current_items[0]
 
                     if drone.current_load + products_weight[product_type] < level_info.max_load :
                         if len(order.current_items) != 0:
@@ -184,18 +202,19 @@ def solve(challenge_data):
                             drone.state = 0
                             solution += f"{drone.drone_id} L {warehouse.warehouse_id} {product_type} 1\n"
                             memory.append([order, product_type])
-                            order.current_items.pop(0)
-                            if len(order.current_items) == 0:
-                                warehouse_orders.pop(0)
+                            order.current_items.remove(product_type)
+                            if len(order.current_items) == 0 and len(warehouse_orders) != 0:
+                                warehouse_orders.remove(order)
                                 if len(warehouse_orders) == 0:
                                     drone.warehouse = choosing_warehouse(warehouses_list, warehouses_orders, warehouse_interest)
-                                    f'drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id}'
+                                    f'drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id}, n°3'
                         else:
-                            warehouse_orders.pop(0)
-                            print(len(warehouse_orders))
                             if len(warehouse_orders) == 0:
                                 drone.warehouse = choosing_warehouse(warehouses_list, warehouses_orders, warehouse_interest)
-                                f'Drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id}'
+                                if warehouse:
+                                    f'Drone {drone.drone_id} choosed warehouse {warehouse.warehouse_id}, n°4'
+                                else:
+                                    overall_state = False
                     else:
                         drone.state = 1
                 
