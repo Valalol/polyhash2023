@@ -16,7 +16,8 @@ class Warehouse:
     """
 
     def __init__(self, coordinates: tuple[int, int], products_info: list[int], warehouse_id: int = 0):
-        self.products_info = products_info
+        self.products_info = products_info.copy()
+        self.predicted_products_info = products_info.copy()
         self.coordinates = coordinates
         self.warehouse_id = warehouse_id
     
@@ -28,11 +29,11 @@ class Warehouse:
         
         return check_b_in_a(self.products_info, products, 2)
     
-    def remove_products(self, products: dict[int] | list[int]):
+    def remove_products(self, products: dict[int] | list[int], real=True):
         """
         Removes products from the warehouse
         
-        Args: 
+        Args:
             products (dict[int]): products to remove
         
         Raises:
@@ -44,12 +45,17 @@ class Warehouse:
             
             if type(products) is dict: #dict[product_type] -> product_number
                 for product_type, product_number in products.items():
-                    self.products_info[product_type] -= product_number
+                    if real:
+                        self.products_info[product_type] -= product_number
+                    else:
+                        self.predicted_products_info[product_type] -= product_number
             
             elif type(products) is list: #dict[index] -> product_type
                 for product_type in products:
-                    self.products_info[product_type] -= product_number
-                    
+                    if real:
+                        self.products_info[product_type] -= product_number
+                    else:
+                        self.predicted_products_info[product_type] -= product_number
         else:
             raise ValueError("The warehouse does not contain at least one product.")
 
@@ -140,6 +146,7 @@ class Drone:
         
         self.__travel(warehouse.coordinates)
         self.state = 2
+        warehouse.remove_products(items, real=False)
         #set into memory : true load
         for item, number in items.items():
             new_dict = {}
@@ -150,7 +157,7 @@ class Drone:
         """
         Loads one or more item of the same type from a warehouse.
         """
-        warehouse.remove_products(items)
+        warehouse.remove_products(items, real=True)
         self.item_dict = dict_add(self.item_dict, items)
         self.current_load += new_items_total_weight
         self.turns_left += len(items)
