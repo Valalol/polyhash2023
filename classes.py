@@ -121,6 +121,7 @@ class Drone:
         self.drone_id = drone_id
         self.current_order = None
         self.memory = []
+        self.orders_memory = []
 
 
     def load(self, items: dict[int], warehouse: Warehouse):

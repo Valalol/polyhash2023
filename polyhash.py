@@ -8,16 +8,15 @@ from classes import *
 from polyparser import parse_challenge
 from polysolver import solve, score_solution, save_solution
 import visualizer
-import mesures_temps
 
 if __name__ == "__main__":
     debug = True
-# a_example
-# b_busy_day
-# c_redudancy
-# d_mother_of_all_warehouses
+    # a_example
+    # b_busy_day
+    # c_redudancy
+    # d_mother_of_all_warehouses
     if debug:
-        args = type("Args", (object,), {"challenge": r"challenges\c_redudancy.in", "output": "output/out.txt"})
+        args = type("Args", (object,), {"challenge": r"challenges\d_mother_of_all_warehouses.in", "output": "output/out.txt"})
     else:
         import argparse
 
@@ -31,12 +30,10 @@ if __name__ == "__main__":
         args = parser.parse_args()
 
     challenge_data = parse_challenge(args.challenge)
-    # challenge_data = (rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict)
 
     visualizer.simple_summary(*challenge_data)
 
-    solution = solve(challenge_data, solve_strategy=1)
-    # print(solution)
+    solution = solve(challenge_data, solve_strategy=3)
 
     if args.output is not None:
         # Sauvegarder le fichier généré
