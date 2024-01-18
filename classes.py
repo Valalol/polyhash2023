@@ -1,9 +1,16 @@
 from __future__ import annotations
-from mathematiks import *
 from math import ceil
-from modified_data_classes import *
-from utils import check_b_in_a
+from utils import check_b_in_a, dict_subtract, dict_add, items_total_weight, dist
 
+
+
+class Tick:
+    def __init__(self):
+        self.value = -1
+
+class Score:
+    def __init__(self):
+        self.value = 0
 
 class Warehouse:
     """
@@ -72,11 +79,14 @@ class Order:
         require(self, products: dict[int]) -> bool: Checks if the drone contains the requested items.
         deliver(self, products: dict[int]) -> None: Removes the requested items from the drone
     """
-    def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int = 0):
+    def __init__(self, coordinates: tuple[int, int], items: list[int], order_id: int, deadline: int, tick: Tick, score: Score):
         self.items = items.copy()
         self.remaining_items = items.copy()
         self.coordinates = coordinates
         self.order_id = order_id
+        self.deadline = deadline
+        self.tick = tick
+        self.score = score
     
     #functions that checks if the drones contains t
     def require(self, products: dict[int]):
@@ -98,6 +108,11 @@ class Order:
         """
         for product in products:
             self.items.pop(self.items.index(product))
+        
+        if len(self.items) == 0:
+            new_score = ceil((self.deadline - self.tick.value) / self.deadline * 100)
+            self.score.value += new_score
+            print(f"Order {self.order_id} delivered at tick {self.tick.value} with a score of {new_score}")
 
 
 class Drone:

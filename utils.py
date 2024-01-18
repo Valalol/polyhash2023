@@ -1,5 +1,6 @@
 from __future__ import annotations
 from classes import *
+
 """
 variables:
     the format dictionary is of the form dict[product_type] -> product_number
@@ -15,6 +16,7 @@ functions:
         calculates the total weight of a container.
 """
 
+
 def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tuple[int,int], Warehouse], max_dist: int) -> Warehouse | None:
     
     min_dist: int = max_dist
@@ -26,8 +28,9 @@ def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tu
         if distance <= min_dist:
             min_dist = distance
             closest_warehouse = warehouse
-            
+
     return closest_warehouse
+
 
 def find_warehouse_containing_order(order: Order, warehouses_container: list[Warehouse] | dict[Warehouse], max_dist: int) -> Warehouse | None:
     
@@ -43,6 +46,7 @@ def find_warehouse_containing_order(order: Order, warehouses_container: list[War
             closest_warehouse = warehouse
 
     return closest_warehouse
+
 
 def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1):
     if type(container2) is dict:
@@ -65,6 +69,7 @@ def check_b_in_a(container1: list | dict, container2: list | dict, container2_li
                     return False
     return True
 
+
 def calculate_weigth(container: list | dict, weight_list: list[int], list_type: int = 1,):
     retour : int = 0
     if type(container) is dict:
@@ -78,6 +83,38 @@ def calculate_weigth(container: list | dict, weight_list: list[int], list_type: 
             for product_type, product_number in enumerate(container):
                 retour += weight_list[product_type] * product_number
     return retour
+
+
+def dict_add(dict_original, dict_to_add):
+    for key in dict_to_add.keys():
+        if key in dict_original.keys():
+            dict_original[key] += dict_to_add[key]
+        else:
+            dict_original[key] = dict_to_add[key]
+    return dict_original
+
+
+def dict_subtract(dict_original, dict_to_sub):
+    for key in dict_to_sub.keys():
+        if key not in dict_original.keys():
+            raise Exception("1+ items are not available in stock")
+        dict_original[key] -= dict_to_sub[key]
+        if dict_original[key] < 0:
+            raise Exception("1+ items are not available in stock")
+    return dict_original
+
+
+def dist(a: tuple[int, int], b: tuple[int, int]):
+    return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** (1 / 2)
+
+
+def items_total_weight(item_weights: list[int], items_list: dict[int]):
+    somme = 0
+    for item in items_list:
+        quantity = items_list[item]
+        somme += item_weights[item] * quantity
+    return somme
+
 
 if __name__ == '__main__':
     if True:

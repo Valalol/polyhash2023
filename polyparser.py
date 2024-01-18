@@ -3,7 +3,7 @@
 
 """Module de parsing des fichiers d'entrée pour la mise en oeuvre du projet Poly#.
 """
-from classes import *
+from classes import Warehouse, Order, Tick, Score
 
 
 def parse_challenge(filename: str) -> object:
@@ -37,17 +37,20 @@ def parse_challenge(filename: str) -> object:
     order_number = data[index][0]
     index += 1
 
+    tick = Tick()
+    score = Score()
+
     orders_dict = {}
     orders_list = []
     for i in range(order_number):
         x, y = data[index]
         order_info: list[int] = data[index + 2]
         index += 3
-        order = Order(coordinates=(x, y), items=order_info, order_id=i)
+        order = Order(coordinates=(x, y), items=order_info, order_id=i, deadline=deadline, tick=tick, score=score)
         orders_list.append(order)
         orders_dict[(x, y)] = order
 
-    return rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list
+    return rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list, tick, score
 
 
 if __name__ == "__main__":

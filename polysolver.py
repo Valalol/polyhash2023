@@ -49,23 +49,6 @@ def solve(challenge_data: list, solve_strategy: int = 1):
     
     return solution
 
-def score_solution(solution: str):
-    """
-    Scores the given solution.
-    
-    Args:
-    - solution (str): A text containing the solution to the challenge data.
-    
-    Returns:
-    - score (int): The score of the given solution.
-    """
-    score = 0
-    
-    for line in solution.split("\n"):
-        pass
-    
-    return score
-
 def save_solution(filename: str, solution: str):
     """
     Saves the given solution to the specified file.

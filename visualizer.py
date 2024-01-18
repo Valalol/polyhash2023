@@ -94,7 +94,7 @@ def coverage_map(size: tuple, warehouses_dict, orders_dict):
 
 
 
-def simple_summary(rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list):
+def simple_summary(rows, columns, drone_count, deadline, max_load, products_weight, warehouses_dict, orders_dict, warehouses_list, orders_list, tick, score):
     text = f"The grid is {rows} rows by {columns} columns. ({rows*columns} cells)\n"
     text += f"There are {drone_count} drones available each with a maximum load of {max_load}.\n"
     text += f"The deadline is {deadline} turns.\n"
