@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # c_redudancy
     # d_mother_of_all_warehouses
     if debug:
-        args = type("Args", (object,), {"challenge": r"challenges\d_mother_of_all_warehouses.in", "output": "output/out.txt"})
+        args = type("Args", (object,), {"challenge": r"challenges\c_redudancy.in", "output": "output/out.txt"})
     else:
         import argparse
 
