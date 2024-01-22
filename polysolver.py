@@ -30,18 +30,9 @@ def solve(challenge_data: list, solve_strategy: int = 1):
     - solution (str): A text containing the solution to the challenge data.
     """
     
-    if solve_strategy == 0:
-        import strategies.strategy_0 as strategy_0
-        solution = strategy_0.solve(challenge_data)
-    
-    elif solve_strategy == 1:
+    if solve_strategy == 1:
         import strategies.strategy_1 as strategy_1
         solution = strategy_1.solve(challenge_data)
-    
-    elif solve_strategy == 2:
-        # TODO: Implement strategy 2
-        # solution = strategy_2.solve(challenge_data)
-        pass
     
     elif solve_strategy == 3:
         import strategies.strategy_3 as strategy_3
@@ -67,6 +58,4 @@ def save_solution(filename: str, solution: str):
     return None
 
 if __name__ == "__main__":
-    challenge_data = parse_challenge("challenges/a_example.in")
-    print(solve(challenge_data,0))
-
+    pass

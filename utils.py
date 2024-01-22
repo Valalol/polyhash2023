@@ -18,47 +18,43 @@ functions:
 
 
 def find_nearest_warehouse(coordinates: tuple[int,int], warehouses_dict: dict[tuple[int,int], Warehouse], max_dist: int) -> Warehouse | None:
-    
     min_dist: int = max_dist
     closest_warehouse: Warehouse | None = None
-    
+
     for warehouse in warehouses_dict.values():
         
         distance: int = dist(coordinates, warehouse.coordinates)
         if distance <= min_dist:
-            min_dist = distance
+            min_dist: int = distance
             closest_warehouse = warehouse
 
     return closest_warehouse
 
 
 def find_warehouse_containing_order(order: Order, warehouses_container: list[Warehouse] | dict[Warehouse], max_dist: int) -> Warehouse | None:
-    
     min_dist: int = max_dist
     closest_warehouse: Warehouse | None = None
-    
+
     for warehouse in warehouses_container:
-        
         distance: int = dist(order.coordinates, warehouse.coordinates)
     
         if distance <= min_dist and warehouse.contains(order.items):
-            min_dist = distance
+            min_dist: int = distance
             closest_warehouse = warehouse
 
     return closest_warehouse
 
 
-def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1):
+def check_b_in_a(container1: list | dict, container2: list | dict, container2_list_type: int = 1) -> bool:
     if type(container2) is dict:
         for product_type, product_number in container2.items():
             if type(container1) is dict:
                 if product_type not in container1:
                     return False
-            
+
             if container1[product_type] < product_number:
                 return False
     else:
-        
         if container2_list_type == 1:
             for product_type, product_number in enumerate(container2):
                 if container1[product_type] < product_number:
@@ -70,7 +66,7 @@ def check_b_in_a(container1: list | dict, container2: list | dict, container2_li
     return True
 
 
-def calculate_weigth(container: list | dict, weight_list: list[int], list_type: int = 1,):
+def calculate_weigth(container: list | dict, weight_list: list[int], list_type: int = 1,) -> int:
     retour : int = 0
     if type(container) is dict:
         for product_type, product_number in container.items():
@@ -85,7 +81,7 @@ def calculate_weigth(container: list | dict, weight_list: list[int], list_type: 
     return retour
 
 
-def dict_add(dict_original, dict_to_add):
+def dict_add(dict_original, dict_to_add) -> dict:
     for key in dict_to_add.keys():
         if key in dict_original.keys():
             dict_original[key] += dict_to_add[key]
@@ -94,7 +90,7 @@ def dict_add(dict_original, dict_to_add):
     return dict_original
 
 
-def dict_subtract(dict_original, dict_to_sub):
+def dict_subtract(dict_original, dict_to_sub) -> dict:
     for key in dict_to_sub.keys():
         if key not in dict_original.keys():
             raise Exception("1+ items are not available in stock")
@@ -108,8 +104,8 @@ def dist(a: tuple[int, int], b: tuple[int, int]):
     return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** (1 / 2)
 
 
-def items_total_weight(item_weights: list[int], items_list: dict[int]):
-    somme = 0
+def items_total_weight(item_weights: list[int], items_list: dict[int]) -> int:
+    somme: int = 0
     for item in items_list:
         quantity = items_list[item]
         somme += item_weights[item] * quantity
@@ -117,7 +113,4 @@ def items_total_weight(item_weights: list[int], items_list: dict[int]):
 
 
 if __name__ == '__main__':
-    if True:
-        test_dict = {1 : 1}
-        test_list = [1,0,1]
-        print(check_b_in_a(test_list,test_dict))
+    pass
