@@ -5,11 +5,10 @@
 """
 
 from classes import *
-from polyparser import parse_challenge
 import mesures_temps
 
 @mesures_temps.time_measurement
-def solve(challenge_data: list, solve_strategy: int = 1):
+def solve(challenge_data: list, solve_strategy: int = 3):
     """
     Solves the given challenge data using the specified strategy2.
     

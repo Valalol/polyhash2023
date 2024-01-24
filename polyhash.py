@@ -10,20 +10,17 @@ from polysolver import solve, save_solution
 import visualizer
 
 if __name__ == "__main__":
-    debug = True
-    if debug:
-        args = type("Args", (object,), {"challenge": r"challenges\c_redudancy.in", "output": "output/out.txt"})
-    else:
-        import argparse
 
-        parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
-        parser.add_argument('challenge', type=str,
-                            help='challenge definition filename',
-                            metavar="challenge.txt")
-        parser.add_argument('output', type=str, default=None,
-                            help='output filename',
-                            metavar="sortie.txt")
-        args = parser.parse_args()
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
+    parser.add_argument('challenge', type=str,
+                        help='challenge definition filename',
+                        metavar="challenge.txt")
+    parser.add_argument('output', type=str, default=None,
+                        help='output filename',
+                        metavar="sortie.txt")
+    args = parser.parse_args()
 
     challenge_data = parse_challenge(args.challenge)
 

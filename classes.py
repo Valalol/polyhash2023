@@ -121,7 +121,7 @@ class Order:
         if len(self.items) == 0:
             new_score = ceil((self.deadline - self.tick.value) / self.deadline * 100)
             self.score.value += new_score
-            print(f"Order {self.order_id} delivered at tick {self.tick.value} with a score of {new_score}")
+            # print(f"Order {self.order_id} delivered at tick {self.tick.value} with a score of {new_score}")
 
 
 class Drone:
