@@ -4,13 +4,10 @@
 """Module principal pour la mise en oeuvre du projet Poly#.
 """
 
-from classes import *
-from polyparser import parse_challenge
-from polysolver import solve, save_solution
-import visualizer
-
-if __name__ == "__main__":
-
+def main():
+    from polyparser import parse_challenge
+    from polysolver import solve, save_solution
+    import visualizer
     import argparse
 
     parser = argparse.ArgumentParser(description='Solve Poly# challenge.')
@@ -32,5 +29,9 @@ if __name__ == "__main__":
         # Sauvegarder le fichier généré
         save_solution(args.output, solution)
         print(f"Solution saved in {args.output}")
+
+
+if __name__ == "__main__":
+    main()
 
 # use : python polyhash.py challenges\a_example.in output\out.txt

@@ -2,6 +2,19 @@
 
 ## Présentation du projet
 
+La demande de bien a explosé, des nouveaux moyens de transport sont nécessaires, la plus grande corpo arasaka cherche à trouver un nouveaux moyen de délivrer le plus de bien, le plus vite et le moins cher possible.
+
+La réponse: des **cyber-drones**.
+
+Vous êtes chargé d’armer le cerveau de ce réseau de drônes d’une **intelligence high-tech**.
+
+
+## Présentation du projet
+
+Projet basé sur le problème de qualification du google Hash Code de 2016.
+
+En partant d'un ensemble de drones, d'une liste de commandes et de la disponibilité des produits dans les entrepôts, planifier les opérations des drones de sorte que les commandes soient complétées le plus rapidement possible.
+
 ## Présentation de l'équipe
 
 - Esnault Valentin valentin.esnault@etu.univ-nantes.fr
@@ -45,15 +58,15 @@ python polyhash.py <fichier d'entrée> <fichier de sortie>
 
 ## Résultats obtenus
 
-| Challenge | Score | Classement | Temps d'execution |
-| :---------: | :---------: | :---------: | :---------: |
-| A | 238 | Top 1 ex equo | 0.002s |
-| B | 101373 | Top 9 | 1.750s |
-| C | 95310 | Top 12 | 2.145s |
-| D | 74249 | Top 7 | 1.423s |
+| Challenge | Score | Classement | Temps d'execution | RAM utilisée |
+| :---------: | :---------: | :---------: | :---------: | :---------: |
+| A | 238 | Top 1 ex equo | 0.002s | 23.0 MiB |
+| B | 101373 | Top 9 | 1.750s | 27.8 MiB |
+| C | 95310 | Top 12 | 2.145s | 27.2 MiB |
+| D | 74249 | Top 7 | 1.423s | 26.0 MiB |
 | Total | 271170 | Top 10 |
 
 ## Pistes d'amélioration
-Il serait probablement pas trop compliqué de permettre aux drones de charger les produits des commandes sans forcément les faire dans l'ordre mais plutot de prendre tous les produits utiles sur les prochaines commandes.
+Il serait probablement possible de permettre aux drones de charger les produits des commandes sans forcément les faire dans l'ordre mais plutot de prendre tous les produits utiles sur les prochaines commandes.
 
 Cela demmanderait un peu de restructuration pour pouvoir passer de commande en commande tout en revenant sur celles qui n'ont pas pu être complétées pour les finir grace aux drones suivants.
